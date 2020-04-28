@@ -22,25 +22,25 @@ export const asyncRouterMap = [
           {
             path: 'total',
             name: 'total',
-            component: () => import('@/views/dashboard/Analysis'),
+            component: () => import('@/views/online/Analysis'),
             meta: { title: '总览', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: 'branch',
             name: 'branch',
-            component: () => import('@/views/dashboard/Analysis'),
+            component: () => import('@/views/online/Analysis'),
             meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: 'group',
             name: 'group',
-            component: () => import('@/views/dashboard/Analysis'),
+            component: () => import('@/views/online/Analysis'),
             meta: { title: '大组', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: 'team',
             name: 'team',
-            component: () => import('@/views/dashboard/Analysis'),
+            component: () => import('@/views/online/Analysis'),
             meta: { title: '小组', keepAlive: false, permission: [ 'dashboard' ] }
           }
         ]
@@ -92,7 +92,7 @@ export const asyncRouterMap = [
           {
             path: 'statistics',
             name: 'report/statistics',
-            component: () => import('@/views/dashboard/Workplace'),
+            component: () => import('@/views/report/BasicForm'),
             meta: { title: '报表统计', keepAlive: false, permission: [ 'dashboard' ] }
           }
         ]

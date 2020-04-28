@@ -2,7 +2,7 @@
   <div class="page-header-index-wide">
     <a-row :gutter="24">
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="总销售额" total="￥126,560">
+        <chart-card :loading="loading" title="在线主播数" total="6,560">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
@@ -20,7 +20,7 @@
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="访问量" :total="8846 | NumberFormat">
+        <chart-card :loading="loading" title="在线观众数" :total="108846 | NumberFormat">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
@@ -66,32 +66,73 @@
     <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
       <div class="salesCard">
         <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <div class="extra-wrapper" slot="tabBarExtraContent">
-            <div class="extra-item">
-              <a>今日</a>
-              <a>本周</a>
-              <a>本月</a>
-              <a>本年</a>
-            </div>
-            <a-range-picker :style="{width: '256px'}" />
-          </div>
-          <a-tab-pane loading="true" tab="销售额" key="1">
+          <a-tab-pane loading="true" tab="观看人数" key="1">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar :data="barData" title="销售额排行" />
+                <bar :data="barData" title="观看人数排行" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
+                <rank-list title="分区实时排行" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
-          <a-tab-pane tab="访问量" key="2">
+          <a-tab-pane tab="礼物数" key="2">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar :data="barData2" title="销售额趋势" />
+                <bar :data="barData2" title="礼物数排行" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
+                <rank-list title="分区实时排行" :list="rankList"/>
+              </a-col>
+            </a-row>
+          </a-tab-pane>
+          <a-tab-pane tab="弹幕数" key="3">
+            <a-row>
+              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+                <bar :data="barData2" title="弹幕数排行" />
+              </a-col>
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+                <rank-list title="分区实时排行" :list="rankList"/>
+              </a-col>
+            </a-row>
+          </a-tab-pane>
+        </a-tabs>
+      </div>
+    </a-card>
+
+    <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
+      <div class="salesCard">
+        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
+          <div class="extra-wrapper" slot="tabBarExtraContent">
+            <a-range-picker :style="{width: '256px'}" />
+          </div>
+          <a-tab-pane loading="true" tab="观看人数" key="1">
+            <a-row>
+              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+                <bar :data="barData" title="观看人数排行" />
+              </a-col>
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+                <rank-list title="分区实时排行" :list="rankList"/>
+              </a-col>
+            </a-row>
+          </a-tab-pane>
+          <a-tab-pane tab="礼物数" key="2">
+            <a-row>
+              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+                <bar :data="barData2" title="礼物数排行" />
+              </a-col>
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+                <rank-list title="分区实时排行" :list="rankList"/>
+              </a-col>
+            </a-row>
+          </a-tab-pane>
+          <a-tab-pane tab="弹幕数" key="3">
+            <a-row>
+              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+                <bar :data="barData2" title="弹幕数排行" />
+              </a-col>
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+                <rank-list title="分区实时排行" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
@@ -164,27 +205,11 @@
           </a-card>
         </a-col>
         <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card class="antd-pro-pages-dashboard-analysis-salesCard" :loading="loading" :bordered="false" title="销售额类别占比" :style="{ height: '100%' }">
+          <a-card class="antd-pro-pages-dashboard-analysis-salesCard" :loading="loading" :bordered="false" title="上月各分区盈利占比" :style="{ height: '100%' }">
             <div slot="extra" style="height: inherit;">
-              <!-- style="bottom: 12px;display: inline-block;" -->
-              <span class="dashboard-analysis-iconGroup">
-                <a-dropdown :trigger="['click']" placement="bottomLeft">
-                  <a-icon type="ellipsis" class="ant-dropdown-link" />
-                  <a-menu slot="overlay">
-                    <a-menu-item>
-                      <a href="javascript:;">操作一</a>
-                    </a-menu-item>
-                    <a-menu-item>
-                      <a href="javascript:;">操作二</a>
-                    </a-menu-item>
-                  </a-menu>
-                </a-dropdown>
-              </span>
               <div class="analysis-salesTypeRadio">
                 <a-radio-group defaultValue="a">
                   <a-radio-button value="a">全部渠道</a-radio-button>
-                  <a-radio-button value="b">线上</a-radio-button>
-                  <a-radio-button value="c">门店</a-radio-button>
                 </a-radio-group>
               </div>
 
@@ -215,7 +240,6 @@
 import moment from 'moment'
 import { ChartCard, MiniArea, MiniBar, MiniProgress, RankList, Bar, Trend, NumberInfo, MiniSmoothArea } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
-import { test } from '@/api/login'
 
 const barData = []
 const barData2 = []
@@ -231,13 +255,11 @@ for (let i = 0; i < 12; i += 1) {
 }
 
 const rankList = []
-for (let i = 0; i < 7; i++) {
-  rankList.push({
-    name: '白鹭岛 ' + (i + 1) + ' 号店',
-    total: 1234.56 - i * 100
-  })
-}
-
+rankList.push({ name: '分支1', total: 1213 })
+rankList.push({ name: '分支2', total: 2543 })
+rankList.push({ name: '分支3', total: 768 })
+rankList.push({ name: '分支4', total: 2543 })
+rankList.push({ name: '分支5', total: 1235 })
 const searchUserData = []
 for (let i = 0; i < 7; i++) {
   searchUserData.push({
@@ -291,13 +313,13 @@ for (let i = 0; i < 50; i += 1) {
 }
 
 const DataSet = require('@antv/data-set')
+
 const sourceData = [
-  { item: '家用电器', count: 32.2 },
-  { item: '食用酒水', count: 21 },
-  { item: '个护健康', count: 17 },
-  { item: '服饰箱包', count: 13 },
-  { item: '母婴产品', count: 9 },
-  { item: '其他', count: 7.8 }
+  { item: '分区1', count: 32.2 },
+  { item: '分区2', count: 21 },
+  { item: '分区3', count: 17 },
+  { item: '分区4', count: 13 },
+  { item: '分区5', count: 9 },
 ]
 
 const pieScale = [{
@@ -357,9 +379,6 @@ export default {
     setTimeout(() => {
       this.loading = !this.loading
     }, 1000)
-    test().then(res => {
-      console.dir(res)
-    })
   }
 }
 </script>

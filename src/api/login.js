@@ -23,7 +23,7 @@ export function login (parameter) {
 
 export function test () {
   return LBMSaxios({
-    url: '/anchor/list',
+    url: '/branch/list',
     method: 'get'
   })
 }
