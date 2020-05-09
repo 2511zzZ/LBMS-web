@@ -29,7 +29,7 @@ function hasPermission (permission, route) {
  * @returns {*}
  */
 // eslint-disable-next-line
-function hasRole(roles, route) {
+function hasRole (roles, route) {
   if (route.meta && route.meta.roles) {
     return route.meta.roles.includes(roles.id)
   } else {

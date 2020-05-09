@@ -115,25 +115,35 @@ export const asyncRouterMap = [
         ]
       },
 
-      // account
+      // account 个人信息 用户设置
       {
-        path: 'account2',
-        name: 'account2',
-        redirect: '/account2/profile',
-        component: RouteView,
-        meta: { title: '用户设置', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        path: '/account2',
+        name: 'Account',
+        redirect: '/account2/settings',
+        component: PageView,
+        meta: { title: '用户管理', keepAlive: true, icon: 'user', permission: [ 'dashboard' ] },
         children: [
           {
-            path: 'profile',
-            name: 'profile',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '个人信息', keepAlive: false, permission: [ 'dashboard' ] }
-          },
-          {
-            path: 'settings',
-            name: 'settings',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '用户设置', keepAlive: false, permission: [ 'dashboard' ] }
+            path: '/account2/settings',
+            name: 'Settings',
+            component: () => import('@/views/account2/settings/Index'),
+            meta: { title: '修改信息', keepAlive: true, permission: [ 'dashboard' ] },
+            redirect: '/account2/settings/info',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/account2/settings/info',
+                name: 'ChangeInfo',
+                component: () => import('@/views/account2/settings/Info'),
+                meta: { title: '个人信息', keepAlive: true, permission: [ 'dashboard' ] }
+              },
+              {
+                path: '/account2/settings/password',
+                name: 'ChangePassword',
+                component: () => import('@/views/account2/settings/Password'),
+                meta: { title: '修改密码', keepAlive: true, permission: [ 'dashboard' ] }
+              }
+            ]
           }
         ]
       },

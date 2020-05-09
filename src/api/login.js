@@ -46,6 +46,16 @@ export function getInfo () {
   })
 }
 
+export function getLBMSInfo () {
+  return LBMSaxios({
+    url: '/user',
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function getCurrentUserNav (token) {
   return axios({
     url: '/user/nav',
