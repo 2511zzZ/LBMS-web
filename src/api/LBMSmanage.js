@@ -17,8 +17,8 @@ export function getUserDetails () {
 export function changeUserDetails (parameters) {
   return LBMSaxios({
     url: 'user',
-    method: 'post',
-    data: parameters
+    method: 'put',
+    data: Qs.stringify(parameters)
   })
 }
 

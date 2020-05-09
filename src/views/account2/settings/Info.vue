@@ -105,12 +105,16 @@ export default {
       this.option.file = file
     },
     submit () {
-      const fb = new FormData()
-      fb.append('nickname', this.nickname)
-      if (this.option.file) {
-        fb.append('icon', this.option.file)
+      // const fb = new FormData()
+      // fb.append('nickname', this.nickname)
+      // if (this.option.file) {
+      //   fb.append('avatar', this.option.file)
+      // }
+      // todo: 头像上传
+      const parameters = {
+        nickname: this.nickname
       }
-      changeUserDetails(fb).then(res => {
+      changeUserDetails(parameters).then(res => {
         this.$message.success('修改成功!')
         this.$store.commit('SET_AVATAR', this.option.img)
       }).catch(err => {
