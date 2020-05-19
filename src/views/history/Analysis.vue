@@ -7,38 +7,58 @@
             <a-icon type="info-circle-o" />
           </a-tooltip>
           <div>
-            昨日开播主播总数  <span>12934</span>
+            <trend flag="up" style="margin-right: 16px;">
+              <span slot="term">历史周同比</span>
+              12%
+            </trend>
+            <trend flag="down">
+              <span slot="term">历史日同比</span>
+              11%
+            </trend>
           </div>
+          <template slot="footer">日均销售额<span>￥ 234.56</span></template>
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="在线主播比例" total="78%">
+        <chart-card :loading="loading" title="在线观众数" :total="108846 | NumberFormat">
+          <a-tooltip title="指标说明" slot="action">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+          <div>
+            <mini-area />
+          </div>
+          <template slot="footer">日访问量<span> {{ '1234' | NumberFormat }}</span></template>
+        </chart-card>
+      </a-col>
+      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
+        <chart-card :loading="loading" title="支付笔数" :total="6560 | NumberFormat">
+          <a-tooltip title="指标说明" slot="action">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+          <div>
+            <mini-bar />
+          </div>
+          <template slot="footer">转化率 <span>60%</span></template>
+        </chart-card>
+      </a-col>
+      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
+        <chart-card :loading="loading" title="运营活动效果" total="78%">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
           <div>
             <mini-progress color="rgb(19, 194, 194)" :target="80" :percentage="78" height="8px" />
           </div>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="在线观众数" :total="totalWatch | NumberFormat">
-          <a-tooltip title="当前分钟在线观众数，波形图表示在线观众数变化趋势" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-area />
-          </div>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="礼物金额" :total="totalGift | NumberFormat">
-          <a-tooltip title="当前分钟礼物金额，柱状图表示每分钟礼物总额" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-bar />
-          </div>
+          <template slot="footer">
+            <trend flag="down" style="margin-right: 16px;">
+              <span slot="term">同周比</span>
+              12%
+            </trend>
+            <trend flag="up">
+              <span slot="term">日环比</span>
+              80%
+            </trend>
+          </template>
         </chart-card>
       </a-col>
     </a-row>
@@ -49,30 +69,30 @@
           <a-tab-pane loading="true" tab="观看人数" key="1">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="onlineWatchData" :settings="watchChartSettings" :title="onlineTitle"></ve-line>
+                <bar :data="barData" title="观看人数排行" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区实时排行" :list="branchWatchRank"/>
+                <rank-list title="分区实时排行" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
           <a-tab-pane tab="礼物数" key="2">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="onlineGiftData" :settings="giftChartSettings"></ve-line>
+                <bar :data="barData2" title="礼物数排行" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区实时排行" :list="branchGiftRank"/>
+                <rank-list title="分区实时排行" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
           <a-tab-pane tab="弹幕数" key="3">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="onlineBulletData" :settings="bulletChartSettings"></ve-line>
+                <bar :data="barData2" title="弹幕数排行" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区实时排行" :list="branchBulletRank"/>
+                <rank-list title="分区实时排行" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
@@ -84,38 +104,35 @@
       <div class="salesCard">
         <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
           <div class="extra-wrapper" slot="tabBarExtraContent">
-            <a-range-picker :style="{width: '256px'}"
-                            :default-value="[moment(new Date(), dateFormat).add(-1, 'months'), moment(new Date(), dateFormat)]"
-                            @change="historyTimeChanged"
-            />
+            <a-range-picker :style="{width: '256px'}" />
           </div>
           <a-tab-pane loading="true" tab="观看人数" key="1">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyWatchData" :settings="chartSettings" :title="historyTitle"></ve-line>
+                <bar :data="barData" title="观看人数排行" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区历史排行" :list="branchHistoryWatchRank"/>
+                <rank-list title="分区实时排行" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
           <a-tab-pane tab="礼物数" key="2">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyGiftData" :settings="chartSettings" :title="noDataTitle"></ve-line>
+                <bar :data="barData2" title="礼物数排行" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区历史排行" :list="branchHistoryGiftRank"/>
+                <rank-list title="分区实时排行" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
           <a-tab-pane tab="弹幕数" key="3">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyBulletData" :settings="chartSettings" :title="noDataTitle"></ve-line>
+                <bar :data="barData2" title="弹幕数排行" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区历史排行" :list="branchHistoryBulletRank"/>
+                <rank-list title="分区实时排行" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
@@ -223,8 +240,6 @@
 import moment from 'moment'
 import { ChartCard, MiniArea, MiniBar, MiniProgress, RankList, Bar, Trend, NumberInfo, MiniSmoothArea } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
-import "echarts/lib/component/title"
-import { getTotalOnlineData, getBranchRank, getLastTotalOnlineData, getTotalHistoryData, getBranchHistoryRank } from '../../api/LBMSmanage'
 
 const barData = []
 const barData2 = []
@@ -339,69 +354,8 @@ export default {
   data () {
     return {
       loading: true,
-      // 折线图设置项
-      chartSettings: {
-        // https://v-charts.js.org/#/line
-      },
-      dateFormat: 'YYYY/MM/DD',
-      legendVisible: false,
-      onlineTitle: { text: '实时数据' },
-      historyTitle: { text: '历史数据' },
-      noDataTitle: {},
-      // 实时数据
-      onlineDataRows: [],
-      onlineWatchData: {
-        columns: ['时间', '观看人数', '昨日平均观看人数', '昨日最大观看人数'],
-        rows: []
-      },
-      onlineGiftData: {
-        columns: ['时间', '礼物数', '昨日平均礼物数'],
-        rows: []
-      },
-      onlineBulletData: {
-        columns: ['时间', '弹幕数', '昨日平均弹幕数'],
-        rows: []
-      },
-      // 历史数据
-      historyDataRows: [],
-      historyWatchData: {
-        columns: ['时间', '平均观看人数', '最大观看人数'],
-        rows: []
-      },
-      historyGiftData: {
-        columns: ['时间', '礼物数'],
-        rows: []
-      },
-      historyBulletData: {
-        columns: ['时间', '弹幕数'],
-        rows: []
-      },
-      // 折线图设置
-      watchChartSettings: {
-        scale: [true, true],
-        metrics: ['观看人数', '昨日平均观看人数', '昨日最大观看人数']
-      },
-      giftChartSettings: {
-        scale: [true, true],
-        metrics: ['礼物数', '昨日平均礼物数']
-      },
-      bulletChartSettings: {
-        scale: [true, true],
-        metrics: ['弹幕数', '昨日平均弹幕数']
-      },
-      // 实时排序
-      branchWatchRank: [],
-      branchGiftRank: [],
-      branchBulletRank: [],
-      // 历史排序
-      branchHistoryWatchRank: [],
-      branchHistoryGiftRank: [],
-      branchHistoryBulletRank: [],
-      // 实时观看总人数
-      totalWatch: 0,
-      // 实时支付数
-      totalGift: 0,
       rankList,
+
       // 搜索用户数
       searchUserData,
       searchUserScale,
@@ -421,186 +375,7 @@ export default {
       }
     }
   },
-  methods: {
-
-    // 更新顶部总览数据
-    refreshTopCard() {
-      getLastTotalOnlineData().then(res => {
-        this.totalWatch = res.data.watchNum
-        this.totalGift = res.data.gift
-      })
-    },
-
-    // 更新实时折线图数据
-    refreshOnline() {
-      const onlineData = getTotalOnlineData( {totalId: 1, datetimeStr: this.formatter(new Date(),'yyyy-MM-dd HH:mm:ss')} )
-      this.onlineDataRows = []
-      onlineData.then(res => {
-        res.datas.forEach(item => {
-          let displayTimeArray = item.time.split('  ')[1].split(':')
-          this.onlineDataRows.push({
-            '时间': displayTimeArray[0] + ':' + displayTimeArray[1],  // 横坐标展示效果: 15:23
-            '观看人数': item.watchNum,
-            '礼物数':item.gift,
-            '弹幕数':item.bulletScreen,
-
-            '昨日平均观看人数':2502347,
-            '昨日平均礼物数':71056,
-            '昨日平均弹幕数':2493410,
-            '昨日最大观看人数':2545687
-          })
-          this.onlineWatchData.rows = this.onlineDataRows
-          this.onlineGiftData.rows = this.onlineDataRows
-          this.onlineBulletData.rows = this.onlineDataRows
-        })
-      })
-    },
-
-    // 更新历史折线图数据
-    refreshHistory(dateBegin, dateEnd) {
-      const parameters = {
-        totalId: 1,
-        dateBeginStr: dateBegin,
-        dateEndStr2: dateEnd
-      }
-      this.historyDataRows = []
-      getTotalHistoryData(parameters).then(res => {
-        if (res.datas.length===0){
-          this.historyWatchData.rows = []
-          this.historyGiftData.rows = []
-          this.historyBulletData.rows = []
-          this.noDataTitle={
-            text: '暂无数据',
-            left: "center",
-            top: "center"
-          }
-          this.historyTitle = this.noDataTitle
-        }else{
-          this.noDataTitle = {}
-          this.historyTitle = {text: '历史数据'}
-          res.datas.forEach(item => {
-            this.historyDataRows.push({
-              '时间': item.date,
-              '平均观看人数': item.watchNum,
-              '礼物数': item.gift,
-              '弹幕数': item.bulletScreen,
-              '最大观看人数': item.maxWatchNum
-            })
-            this.historyWatchData.rows = this.historyDataRows
-            this.historyGiftData.rows = this.historyDataRows
-            this.historyBulletData.rows = this.historyDataRows
-          })
-        }
-      })
-    },
-
-    // 更新实时排行
-    refreshOnlineRank() {
-      getBranchRank().then(res => {
-        this.branchWatchRank = []
-        this.branchGiftRank = []
-        this.branchBulletRank = []
-        res.datas.forEach(item => {
-          this.branchWatchRank.push({
-            name: '分区' + item.branchId,
-            total: item.watchNum
-          })
-          this.branchGiftRank.push({
-            name: '分区' + item.branchId,
-            total: item.gift
-          })
-          this.branchBulletRank.push({
-            name: '分区' + item.branchId,
-            total: item.bulletScreen
-          })
-        })
-        this.branchWatchRank.sort(function (a, b) {
-          return b.total - a.total
-        })
-        this.branchGiftRank.sort(function (a, b) {
-          return b.total - a.total
-        })
-        this.branchBulletRank.sort(function (a, b) {
-          return b.total - a.total
-        })
-      })
-    },
-
-    // 更新历史排行
-    refreshHistoryRank(dateBegin, dateEnd) {
-      const parameters = {
-        totalId: 1,
-        dateBeginStr: dateBegin,
-        dateEndStr2: dateEnd
-      }
-      getBranchHistoryRank(parameters).then(res => {
-        this.branchHistoryWatchRank = []
-        this.branchHistoryGiftRank = []
-        this.branchHistoryBulletRank = []
-        res.datas.forEach(item => {
-          this.branchHistoryWatchRank.push({
-            name: '分区' + item.branchId,
-            total: item.watchNum
-          })
-          this.branchHistoryGiftRank.push({
-            name: '分区' + item.branchId,
-            total: item.gift
-          })
-          this.branchHistoryBulletRank.push({
-            name: '分区' + item.branchId,
-            total: item.bulletScreen
-          })
-        })
-        this.branchHistoryWatchRank.sort(function (a, b) {
-          return b.total - a.total
-        })
-        this.branchHistoryGiftRank.sort(function (a, b) {
-          return b.total - a.total
-        })
-        this.branchHistoryBulletRank.sort(function (a, b) {
-          return b.total - a.total
-        })
-      })
-    },
-
-    historyTimeChanged(time, timeStrList) {
-      const beginStr = timeStrList[0]
-      const endStr = timeStrList[1]
-      console.log(beginStr, endStr)
-      this.refreshHistory(beginStr, endStr)
-      this.refreshHistoryRank(beginStr, endStr)
-    },
-
-    formatter (thistime, fmt) {
-      let $this = new Date(thistime)
-      let o = {
-        'M+': $this.getMonth() + 1,
-        'd+': $this.getDate(),
-        'H+': $this.getHours(),
-        'm+': $this.getMinutes(),
-        's+': $this.getSeconds(),
-        'q+': Math.floor(($this.getMonth() + 3) / 3),
-        'S': $this.getMilliseconds()
-      }
-      if (/(y+)/.test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
-      }
-      for (var k in o) {
-        if (new RegExp('(' + k + ')').test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-        }
-      }
-      return fmt
-    },
-
-    moment
-  },
   created () {
-    this.refreshTopCard()
-    this.refreshOnline()
-    this.refreshHistory('2019-5-20', '2020-5-20')
-    this.refreshOnlineRank()
-    this.refreshHistoryRank('2019-5-20', '2020-5-20')
     setTimeout(() => {
       this.loading = !this.loading
     }, 1000)

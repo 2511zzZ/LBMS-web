@@ -29,3 +29,42 @@ export function changePassword (parameters) {
     data: Qs.stringify(parameters)
   })
 }
+
+export function getTotalOnlineData(parameters) {
+  return LBMSaxios({
+    url: '/totalData/online',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getBranchRank () {
+  return LBMSaxios({
+    url: 'totalData/onlineRank',
+    method: 'get'
+  })
+}
+
+export function getBranchHistoryRank (parameters) {
+  return LBMSaxios({
+    url: 'totalData/historyRank',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getLastTotalOnlineData () {
+  return LBMSaxios({
+    url: 'totalData/lastOnlineData',
+    method: 'get'
+  })
+}
+
+export function getTotalHistoryData (parameters) {
+  return LBMSaxios({
+    url: 'totalData/historys',
+    method: 'get',
+    params: parameters
+  })
+
+}

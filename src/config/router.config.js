@@ -20,26 +20,26 @@ export const asyncRouterMap = [
         meta: { title: '实时数据', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
           {
-            path: 'total',
-            name: 'total',
+            path: '/online/total',
+            name: 'onlineTotal',
             component: () => import('@/views/online/Analysis'),
             meta: { title: '总览', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
-            path: 'branch',
-            name: 'branch',
+            path: '/online/branch',
+            name: 'onlineBranch',
             component: () => import('@/views/online/Analysis'),
             meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
-            path: 'group',
-            name: 'group',
+            path: '/online/group',
+            name: 'onlineGroup',
             component: () => import('@/views/online/Analysis'),
             meta: { title: '大组', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
-            path: 'team',
-            name: 'team',
+            path: '/online/team',
+            name: 'onlineTeam',
             component: () => import('@/views/online/Analysis'),
             meta: { title: '小组', keepAlive: false, permission: [ 'dashboard' ] }
           }
@@ -55,27 +55,27 @@ export const asyncRouterMap = [
         meta: { title: '历史数据', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
           {
-            path: 'total',
-            name: 'total',
-            component: () => import('@/views/dashboard/Analysis'),
+            path: '/history/total',
+            name: 'historyTotal',
+            component: () => import('@/views/history/Analysis'),
             meta: { title: '总览', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
-            path: 'branch',
-            name: 'branch',
-            component: () => import('@/views/dashboard/Analysis'),
+            path: '/history/branch',
+            name: 'historyBranch',
+            component: () => import('@/views/history/Analysis'),
             meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
-            path: 'group',
-            name: 'group',
-            component: () => import('@/views/dashboard/Analysis'),
+            path: '/history/group',
+            name: 'historyGroup',
+            component: () => import('@/views/history/Analysis'),
             meta: { title: '大组', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
-            path: 'team',
-            name: 'team',
-            component: () => import('@/views/dashboard/Analysis'),
+            path: '/history/team',
+            name: 'historyTeam',
+            component: () => import('@/views/history/Analysis'),
             meta: { title: '小组', keepAlive: false, permission: [ 'dashboard' ] }
           }
         ]
@@ -83,34 +83,33 @@ export const asyncRouterMap = [
 
       // report
       {
-        path: 'report',
+        path: '/report',
         name: 'report',
         redirect: '/report/statistics',
-        component: RouteView,
-        meta: { title: '报表统计', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        component: PageView,
+        meta: { title: '报表统计', keepAlive: true, icon: 'table', permission: [ 'dashboard' ] },
         children: [
           {
-            path: 'statistics',
-            name: 'report/statistics',
-            component: () => import('@/views/report/BasicForm'),
-            meta: { title: '报表统计', keepAlive: false, permission: [ 'dashboard' ] }
+            path: '/report/statistics',
+            name: 'ReportStatistics',
+            component: () => import('@/views/report/ReportForm'),
+            meta: { title: '报表导出', keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]
       },
-
       // alarm
       {
         path: 'alarm',
         name: 'alarm',
         redirect: '/alarm/my-alarm',
-        component: RouteView,
-        meta: { title: '警报管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        component: PageView,
+        meta: { title: '警报管理', keepAlive: true, icon: 'warning', permission: [ 'dashboard' ] },
         children: [
           {
-            path: 'my-alarm',
-            name: 'my-alarm',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '我的警报', keepAlive: false, permission: [ 'dashboard' ] }
+            path: '/alarm/my-alarm',
+            name: 'MyAlarm',
+            component: () => import('@/views/alert/Alert'),
+            meta: { title: '我的警报', keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]
       },
