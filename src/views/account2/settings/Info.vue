@@ -26,16 +26,6 @@
           >
             <a-input v-model="sex" disabled/>
           </a-form-item>
-          <a-form-item
-            label="出生日期"
-          >
-            <a-date-picker v-model="birthday" disabled/>
-          </a-form-item>
-          <a-form-item
-            label="籍贯"
-          >
-            <a-input v-model="birthplace" disabled/>
-          </a-form-item>
 
           <a-form-item>
             <a-button htmlType="submit" type="primary" @click="submit">提交</a-button>
@@ -75,8 +65,6 @@ export default {
       name: '',
       nickname: '',
       sex: '',
-      birthday: null,
-      birthplace: 'xx省',
       employee_id: 0,
       preview: {},
       option: {

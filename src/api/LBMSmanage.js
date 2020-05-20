@@ -66,5 +66,18 @@ export function getTotalHistoryData (parameters) {
     method: 'get',
     params: parameters
   })
+}
 
+export function getAlertList () {
+  return LBMSaxios({
+    url: '/alarm/',
+    method: 'get'
+  })
+}
+
+export function getAlertOverView () {
+  return LBMSaxios({
+    url: '/alarm/overview',
+    method: 'get'
+  })
 }

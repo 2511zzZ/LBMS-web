@@ -31,33 +31,33 @@
       <a-list
         size="large"
         :pagination="pagination">
-        <a-list-item :key="index" v-for="(item, index) in alerts">
-          <a-list-item-meta :description="item.description">
-            <a slot="title" @click="handleDetails(item.alert_id)">{{ item.title }}</a>
+        <a-list-item :key="index" v-for="(item, index) in alarms">
+          <a-list-item-meta :description="item.alarm.reason">
+            <a slot="title" @click="handleDetails(item.alarmId)">{{ item.alarmId }}</a>
           </a-list-item-meta>
           <div slot="actions">
-            <a @click="handleMark(item.alert_id, item.alert.status)">{{ item.alert.status===1 ? '标记' : '删除' }}</a>
+            <a @click="handleMark(item.alarmId, item.alarm.status)">{{ item.alarm.status===1 ? '标记' : '删除' }}</a>
           </div>
           <div slot="actions">
             <a-dropdown>
               <a>更多<a-icon type="down"/></a>
               <a-menu slot="overlay">
-                <a-menu-item @click="handleDetails(item.alert_id)"><a>查看详情</a></a-menu-item>
+                <a-menu-item @click="handleDetails(item.alarmId)"><a>查看详情</a></a-menu-item>
               </a-menu>
             </a-dropdown>
           </div>
           <div class="list-content" style="float: left">
             <div class="list-content-item" style="float: left">
               <span>处理人</span>
-              <p>{{ item.alert.final_deal_employee_name || '暂无' }}</p>
+              <p>{{ item.alarm.finalDealName || '暂无' }}</p>
             </div>
             <div class="list-content-item" style="float: left">
               <span>开始时间</span>
-              <p>{{ item.alert.start_time.split('.')[0].replace('T', ' ') }}</p>
+              <p>{{ item.alarm.startTime.split('.')[0].replace('T', ' ') }}</p>
             </div>
             <div class="list-content-item" style="float: left">
-              <span v-if="item.alert.end_time">结束时间</span>
-              <p>{{ item.alert.end_time ? item.alert.end_time.split('.')[0].replace('T', ' ') : (item.is_timeout ? '已超时' : '待处理') }}</p>
+              <span v-if="item.alarm.endTime">结束时间</span>
+              <p>{{ item.alarm.endTime ? item.alarm.endTime.split('.')[0].replace('T', ' ') : (item.isTimeout ? '已超时' : '待处理') }}</p>
             </div>
           </div>
         </a-list-item>
@@ -80,9 +80,7 @@
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-// import { getAlertOverView, getAlertList, getAlertTransfer, updateAlert } from '@/api/manage'
-
-// todo:完成后端接口
+import { getAlertList, getAlertOverView } from '../../api/LBMSmanage'
 
 const alertStep = [
   { title: '大组长', description: '', status: 'waiting' },
@@ -108,8 +106,7 @@ export default {
             page: this.pagination.current
           }
           getAlertList(parameters).then(res => {
-            res = res.result
-            this.alerts = res.results
+            this.alerts = res.datas
             this.pagination.total = res.count
           })
         },
@@ -121,6 +118,31 @@ export default {
       alertStep,
       visible: false,
       alerts: [],
+
+      alarms: [
+        {
+          "alarmId": "200520104900003",
+          "employeeId": 57,
+          "username": "leisheng",
+          "role": 4,
+          "isTimeout": 0,
+          "isDelete": 0,
+          "time": "2020-05-20T10:49:00.000+0800",
+          "alarm": {
+            "alarmId": "200520104900003",
+            "anchorId": 3,
+            "anchorName": "张政谦",
+            "reason": "3号主播张政谦被频繁举报",
+            "status": 1,
+            "startTime": "2020-05-20T10:49:00.000+0800",
+            "endTime": null,
+            "finalDealId": null,
+            "finalDealName": null,
+            "dealRole": null
+          }
+        }
+      ],
+
       alertOverView: {
         to_do_counts: '',
         completed_alerts_this_month: '',
@@ -137,9 +159,8 @@ export default {
       page_size: this.pagination.pageSize,
       page: this.pagination.current
     }
-    getAlertList(parameters).then(res => {
-      res = res.result
-      this.alerts = res.results
+    getAlertList().then(res => {
+      this.alarms = res.datas
       this.pagination.total = res.count
     })
   },
@@ -152,8 +173,7 @@ export default {
         page: 1
       }
       getAlertList(parameters).then(res => {
-        res = res.result
-        this.alerts = res.results
+        this.alerts = res.datas
         this.pagination.total = res.count
         this.$store.commit('SET_ALERT_NUM', res.count)
       })
@@ -221,10 +241,10 @@ export default {
     },
     getOverView () {
       getAlertOverView().then(res => {
-        res = res.result[0]
-        this.alertOverView.to_do_counts = res.to_do_counts + '条警报'
-        this.alertOverView.completed_alerts_this_month = res.completed_alerts_this_month + '条警报'
-        this.alertOverView.avg_process_duration_this_month = res.avg_process_duration_this_month === '暂无' ? '暂无' : res.avg_process_duration_this_month.replace('days,', '天')
+        res = res.data
+        this.alertOverView.to_do_counts = res.waitingNum + '条警报'
+        this.alertOverView.completed_alerts_this_month = res.doneNum + '条警报'
+        this.alertOverView.avg_process_duration_this_month = res.avgDealCost === '0' ? '暂无' : Math.floor(res.avgDealCost / 60) + '分' + res.avgDealCost%60 + '秒'
       })
     }
   }

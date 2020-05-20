@@ -25,13 +25,16 @@
               大组
             </a-select-option>
             <a-select-option value="team">
-              小组
+              分区
             </a-select-option>
             <a-select-option value="stat">
-              工位
+              大组
             </a-select-option>
             <a-select-option value="worker">
-              工人
+              小组
+            </a-select-option>
+            <a-select-option value="worker">
+              主播
             </a-select-option>
           </a-select>
         </a-form-item>
