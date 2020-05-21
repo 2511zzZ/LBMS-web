@@ -31,8 +31,9 @@ import ArticleListContent from '@/components/ArticleListContent'
 import Dialog from '@/components/Dialog'
 import { VueCropper } from 'vue-cropper'
 
-import DataTable from '@/components/PersonCommon/DataTable'
+import LevelTable from '@/components/PersonCommon/LevelTable'
 import TopCards from '@/components/PersonCommon/TopCards'
+import MonitorCharts from '@/components/PersonCommon/MonitorCharts'
 
 export {
   AvatarList,
@@ -67,6 +68,7 @@ export {
   Dialog,
   VueCropper,
 
-  DataTable,
+  LevelTable,
+  MonitorCharts,
   TopCards
 }

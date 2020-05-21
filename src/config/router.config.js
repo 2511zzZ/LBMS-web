@@ -28,7 +28,7 @@ export const asyncRouterMap = [
           {
             path: '/online/branch',
             name: 'onlineBranch',
-            component: () => import('@/views/list2/TableList'),
+            component: () => import('@/views/online/TabTest'),
             meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
