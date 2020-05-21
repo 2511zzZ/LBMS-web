@@ -10,45 +10,28 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { getTotalOnlineData } from '../../api/LBMSmanage'
-
-const data = []
-const beginDay = new Date().getTime()
-
-for (let i = 0; i < 10; i++) {
-  data.push({
-    x: moment(new Date(beginDay + 1000 * 60 * 60 * 24 * i)).format('YYYY-MM-DD'),
-    y: Math.round(Math.random() * 10)
-  })
-}
-
-const tooltip = [
-  'x*y',
-  (x, y) => ({
-    name: x,
-    value: y
-  })
-]
-
-const scale = [{
-  dataKey: 'x',
-  min: 2
-}, {
-  dataKey: 'y',
-  title: '时间',
-  min: 1,
-  max: 30
-}]
 
 export default {
   name: 'MiniBar',
+  props: {
+    level: {
+      type: String,
+      required: true
+    },
+    levelId: {
+      type: Number,
+      required: true
+    },
+    date: {
+      type: Date,
+      required: false,
+      default: () => { return new Date() }
+    }
+  },
   data () {
     return {
       gift:[],
-      data,
-      tooltip,
-      scale,
       height: 100
     }
   },
@@ -76,17 +59,19 @@ export default {
     }
   },
   created () {
-    getTotalOnlineData({totalId: 1, datetimeStr: this.formatter(new Date(),'yyyy-MM-dd HH:mm:ss')}).then(
-      res => {
-        res.datas.forEach(item => {
-          let displayTimeArray = item.time.split('  ')[1].split(':')
-          this.gift.push({
-            x: displayTimeArray[0] + ':' + displayTimeArray[1],
-            y: item.gift
+    if (this.level === 'total') {
+      getTotalOnlineData({totalId: this.levelId, datetimeStr: this.formatter(this.date,'yyyy-MM-dd HH:mm:ss')}).then(
+        res => {
+          res.datas.forEach(item => {
+            let displayTimeArray = item.time.split('  ')[1].split(':')
+            this.gift.push({
+              x: displayTimeArray[0] + ':' + displayTimeArray[1],
+              y: item.gift
+            })
           })
-        })
-      }
-    )
+        }
+      )
+    }
   }
 }
 </script>
