@@ -28,13 +28,13 @@ export const asyncRouterMap = [
           {
             path: '/online/branch',
             name: 'onlineBranch',
-            component: () => import('@/views/online/Analysis'),
+            component: () => import('@/views/list2/TableList'),
             meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: '/online/group',
             name: 'onlineGroup',
-            component: () => import('@/views/online/Analysis'),
+            component: () => import('@/views/online/TabTest'),
             meta: { title: '大组', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {

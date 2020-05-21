@@ -80,7 +80,7 @@
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import { getAlertList, getAlertOverView } from '../../api/LBMSmanage'
+import { getAlertList, getAlertOverView, updateAlert, deleteAlert } from '../../api/LBMSmanage'
 
 const alertStep = [
   { title: '大组长', description: '', status: 'waiting' },
@@ -106,7 +106,7 @@ export default {
             page: this.pagination.current
           }
           getAlertList(parameters).then(res => {
-            this.alerts = res.datas
+            this.alarms = res.datas
             this.pagination.total = res.count
           })
         },
@@ -118,31 +118,7 @@ export default {
       alertStep,
       visible: false,
       alerts: [],
-
-      alarms: [
-        {
-          "alarmId": "200520104900003",
-          "employeeId": 57,
-          "username": "leisheng",
-          "role": 4,
-          "isTimeout": 0,
-          "isDelete": 0,
-          "time": "2020-05-20T10:49:00.000+0800",
-          "alarm": {
-            "alarmId": "200520104900003",
-            "anchorId": 3,
-            "anchorName": "张政谦",
-            "reason": "3号主播张政谦被频繁举报",
-            "status": 1,
-            "startTime": "2020-05-20T10:49:00.000+0800",
-            "endTime": null,
-            "finalDealId": null,
-            "finalDealName": null,
-            "dealRole": null
-          }
-        }
-      ],
-
+      alarms: [],
       alertOverView: {
         to_do_counts: '',
         completed_alerts_this_month: '',
@@ -159,7 +135,7 @@ export default {
       page_size: this.pagination.pageSize,
       page: this.pagination.current
     }
-    getAlertList().then(res => {
+    getAlertList(parameters).then(res => {
       this.alarms = res.datas
       this.pagination.total = res.count
     })
@@ -173,9 +149,9 @@ export default {
         page: 1
       }
       getAlertList(parameters).then(res => {
-        this.alerts = res.datas
+        this.alarms = res.datas
         this.pagination.total = res.count
-        this.$store.commit('SET_ALERT_NUM', res.count)
+        // this.$store.commit('SET_ALERT_NUM', res.count)
       })
     },
     handleOk () {
@@ -221,8 +197,8 @@ export default {
     },
     handleMark (alertId, status) {
       if (status === 1) {
-        const parameters = { status: 2 }
-        updateAlert(alertId, parameters).then(res => {
+        const parameters = { alarmId: alertId, operation: 2 }
+        updateAlert(parameters).then(res => {
           this.getOverView()
           this.alertClassify(status)
           this.$message.success('警报处理成功!')
@@ -230,8 +206,7 @@ export default {
           this.$message.error(err)
         })
       } else {
-        const params = { is_delete: true }
-        updateAlert(alertId, params).then(res => {
+        deleteAlert( {alarmId: alertId} ).then(res => {
           this.alertClassify(status)
           this.$message.success('警报删除成功!')
         }).catch(err => {

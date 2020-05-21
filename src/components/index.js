@@ -31,6 +31,9 @@ import ArticleListContent from '@/components/ArticleListContent'
 import Dialog from '@/components/Dialog'
 import { VueCropper } from 'vue-cropper'
 
+import DataTable from '@/components/PersonCommon/DataTable'
+import TopCards from '@/components/PersonCommon/TopCards'
+
 export {
   AvatarList,
   Bar,
@@ -62,5 +65,8 @@ export {
   StandardFormRow,
   ArticleListContent,
   Dialog,
-  VueCropper
+  VueCropper,
+
+  DataTable,
+  TopCards
 }
