@@ -38,6 +38,38 @@ export function getTotalOnlineData(parameters) {
   })
 }
 
+export function getBranchOnlineData(parameters) {
+  return LBMSaxios({
+    url: '/branchData/online',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getGroupOnlineData(parameters) {
+  return LBMSaxios({
+    url: '/groupData/online',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getTeamOnlineData(parameters) {
+  return LBMSaxios({
+    url: '/teamData/online',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getAnchorOnlineData(parameters) {
+  return LBMSaxios({
+    url: '/anchorData/online',
+    method: 'get',
+    params: parameters
+  })
+}
+
 export function getBranchRank () {
   return LBMSaxios({
     url: 'totalData/onlineRank',
@@ -63,6 +95,38 @@ export function getLastTotalOnlineData () {
 export function getTotalHistoryData (parameters) {
   return LBMSaxios({
     url: 'totalData/historys',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getBranchHistoryData (parameters) {
+  return LBMSaxios({
+    url: 'branchData/historys',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getGroupHistoryData (parameters) {
+  return LBMSaxios({
+    url: 'groupData/historys',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getTeamHistoryData (parameters) {
+  return LBMSaxios({
+    url: 'teamData/historys',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getAnchorHistoryData (parameters) {
+  return LBMSaxios({
+    url: 'anchorData/historys',
     method: 'get',
     params: parameters
   })
@@ -103,5 +167,29 @@ export function getBranchList () {
   return LBMSaxios({
     url: '/branch/list',
     method: 'get'
+  })
+}
+
+export function getGroupList (parameters) {
+  return LBMSaxios({
+    url: '/group/list',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getTeamList (parameters) {
+  return LBMSaxios({
+    url: '/team/list',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getAnchorList (parameters) {
+  return LBMSaxios({
+    url: '/anchor/list',
+    method: 'get',
+    params: parameters
   })
 }

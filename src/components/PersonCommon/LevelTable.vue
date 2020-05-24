@@ -8,13 +8,8 @@
       rowKey="key"
       :columns="columns"
       :data="loadData"
-      :alert="options.alert"
-      :rowSelection="options.rowSelection"
       showPagination="auto"
     >
-      <span slot="serial" slot-scope="text, record, index">
-        {{ index + 1 }}
-      </span>
       <span slot="action" slot-scope="text, record">
         <template>
           <a @click="handleClick(record)">查看</a>
@@ -29,7 +24,7 @@ import moment from 'moment'
 import { STable, TopCards, MonitorCharts } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import "echarts/lib/component/title"
-import { getBranchList } from '../../api/LBMSmanage'
+import { getBranchList, getGroupList, getTeamList, getAnchorList } from '../../api/LBMSmanage'
 
 export default {
   name: 'LevelTable',
@@ -57,30 +52,17 @@ export default {
       // 一秒加载动画
       loading: true,
 
-      selectedRowKeys: [],
-      selectedRows: [],
-
-      // custom table alert & rowSelection
-      options: {
-        alert: { show: true, clear: () => { this.selectedRowKeys = [] } },
-        rowSelection: {
-          selectedRowKeys: this.selectedRowKeys,
-          onChange: this.onSelectChange
-        }
-      },
-      optionAlertShow: false,
-
       getList: getBranchList
     }
   },
   methods: {
 
     columnsInit () {
-      if( this.level==='total' ){
+      if( this.level==='branch' ){
         this.columns = [
           {
-            title: '#',
-            scopedSlots: { customRender: 'serial' }
+            title: '分区号',
+            dataIndex: 'branchId'
           },
           {
             title: '分区名',
@@ -102,13 +84,101 @@ export default {
           }
         ]
       }
+      if( this.level==='group' ){
+        this.columns = [
+          {
+            title: '大组号',
+            dataIndex: 'groupId'
+          },
+          {
+            title: '大组名',
+            dataIndex: 'groupName'
+          },
+          {
+            title: '管理用户编号',
+            dataIndex: 'employeeId'
+          },
+          {
+            title: '管理用户名',
+            dataIndex: 'employeeName'
+          },
+          {
+            title: '操作',
+            dataIndex: 'action',
+            width: '150px',
+            scopedSlots: { customRender: 'action' }
+          }
+        ]
+      }
+      if( this.level==='team' ){
+        this.columns = [
+          {
+            title: '小组号',
+            dataIndex: 'teamId'
+          },
+          {
+            title: '小组名',
+            dataIndex: 'teamName'
+          },
+          {
+            title: '管理用户编号',
+            dataIndex: 'employeeId'
+          },
+          {
+            title: '管理用户名',
+            dataIndex: 'employeeName'
+          },
+          {
+            title: '操作',
+            dataIndex: 'action',
+            width: '150px',
+            scopedSlots: { customRender: 'action' }
+          }
+        ]
+      }
+      if( this.level==='anchor' ){
+        this.columns = [
+          {
+            title: '主播编号',
+            dataIndex: 'anchorId'
+          },
+          {
+            title: '房间号',
+            dataIndex: 'roomId'
+          },
+          {
+            title: '主播姓名',
+            dataIndex: 'name'
+          },
+          {
+            title: '主播昵称',
+            dataIndex: 'nickname'
+          },
+          {
+            title: '操作',
+            dataIndex: 'action',
+            width: '150px',
+            scopedSlots: { customRender: 'action' }
+          }
+        ]
+      }
     },
     loadDataInit () {
-      if( this.level==='total' ){
+      if( this.level==='branch' ){
         this.getList = getBranchList
       }
-      this.loadData = () => {
-        const parameters = { page:1, pageSize:30 }
+      if( this.level==='group' ){
+        this.getList = getGroupList
+      }
+      if( this.level==='team' ){
+        this.getList = getTeamList
+      }
+      if( this.level==='anchor' ){
+        this.getList = getAnchorList
+      }
+      this.loadData = (parameters) => {
+        parameters.page = parameters.pageNo
+        console.dir(parameters)
         return this.getList(parameters)
           .then(res => {
             res.pageNo = parameters.page
@@ -170,7 +240,9 @@ export default {
       return fmt
     },
 
-    handleClick (record) { console.log(record) },
+    handleClick (record) {
+      this.$emit('onClick', record[Object.keys(record)[0]])
+    },
 
     moment
   },

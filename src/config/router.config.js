@@ -22,26 +22,32 @@ export const asyncRouterMap = [
           {
             path: '/online/total',
             name: 'onlineTotal',
-            component: () => import('@/views/online/Analysis'),
+            component: () => import('@/views/online/Total'),
             meta: { title: '总览', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: '/online/branch',
             name: 'onlineBranch',
-            component: () => import('@/views/online/TabTest'),
+            component: () => import('@/views/online/Branch'),
             meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: '/online/group',
             name: 'onlineGroup',
-            component: () => import('@/views/online/TabTest'),
+            component: () => import('@/views/online/Group'),
             meta: { title: '大组', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: '/online/team',
             name: 'onlineTeam',
-            component: () => import('@/views/online/Analysis'),
+            component: () => import('@/views/online/Team'),
             meta: { title: '小组', keepAlive: false, permission: [ 'dashboard' ] }
+          },
+          {
+            path: '/online/anchor',
+            name: 'onlineAnchor',
+            component: () => import('@/views/online/Anchor'),
+            meta: { title: '主播', keepAlive: false, permission: [ 'dashboard' ] }
           }
         ]
       },
@@ -153,7 +159,7 @@ export const asyncRouterMap = [
         name: 'system',
         redirect: '/system/settings',
         component: RouteView,
-        meta: { title: '系统管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: '系统管理', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
         children: [
           {
             path: 'settings',

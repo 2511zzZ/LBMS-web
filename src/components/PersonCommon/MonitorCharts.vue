@@ -86,7 +86,11 @@ import moment from 'moment'
 import { RankList, Bar, Trend, NumberInfo, MiniSmoothArea, STable, Ellipsis } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import "echarts/lib/component/title"
-import { getTotalOnlineData, getBranchRank, getTotalHistoryData, getBranchHistoryRank } from '../../api/LBMSmanage'
+import { getTotalOnlineData, getTotalHistoryData, getBranchHistoryRank, getBranchRank,
+         getBranchOnlineData, getBranchHistoryData,
+         getGroupOnlineData, getGroupHistoryData,
+         getTeamOnlineData, getTeamHistoryData,
+         getAnchorOnlineData, getAnchorHistoryData} from '../../api/LBMSmanage'
 
 export default {
   name: 'MonitorCharts',
@@ -185,6 +189,12 @@ export default {
       getOnlineRank: getBranchRank,
       getHistoryRank: getBranchHistoryRank,
 
+      fakeAvgData: {
+        avgWatch: 2502347,
+        avgGift: 71056,
+        avgBullet: 2493410,
+        maxWatch: 2545687
+      }
 
     }
   },
@@ -202,10 +212,10 @@ export default {
             '礼物数':item.gift,
             '弹幕数':item.bulletScreen,
 
-            '昨日平均观看人数':2502347,
-            '昨日平均礼物数':71056,
-            '昨日平均弹幕数':2493410,
-            '昨日最大观看人数':2545687
+            '昨日平均观看人数':this.fakeAvgData.avgWatch,
+            '昨日平均礼物数':this.fakeAvgData.avgGift,
+            '昨日平均弹幕数':this.fakeAvgData.avgBullet,
+            '昨日最大观看人数':this.fakeAvgData.maxWatch
           })
           this.onlineWatchData.rows = this.onlineDataRows
           this.onlineGiftData.rows = this.onlineDataRows
@@ -283,6 +293,7 @@ export default {
 
     // 更新历史排行
     refreshHistoryRank(parameters, dateBegin, dateEnd) {
+      console.log(dateBegin, dateEnd)
         parameters.dateBeginStr = dateBegin
         parameters.dateEndStr2 = dateEnd
       this.getHistoryRank(parameters).then(res => {
@@ -350,17 +361,42 @@ export default {
       if (this.level === 'total'){
         this.parameters.totalId = this.levelId
         this.parameters.datetimeStr = this.formatter(new Date(),'yyyy-MM-dd HH:mm:ss')
+      }else if (this.level === 'branch'){
+        this.fakeAvgData = {avgWatch: 502347, avgGift: 15056, avgBullet: 503410, maxWatch: 545687 }
+        this.parameters.branchId = this.levelId
+        this.parameters.datetimeStr = this.formatter(new Date(),'yyyy-MM-dd HH:mm:ss')
+        this.getOnlineData = getBranchOnlineData
+        this.getHistoryData = getBranchHistoryData
+      }else if (this.level === 'group'){
+        this.fakeAvgData = {avgWatch: 50042, avgGift: 1556, avgBullet: 50310, maxWatch: 54587 }
+        this.parameters.groupId = this.levelId
+        this.parameters.datetimeStr = this.formatter(new Date(),'yyyy-MM-dd HH:mm:ss')
+        this.getOnlineData = getGroupOnlineData
+        this.getHistoryData = getGroupHistoryData
+      }else if (this.level === 'team'){
+        this.fakeAvgData = {avgWatch: 5442, avgGift: 196, avgBullet: 4914, maxWatch: 6823 }
+        this.parameters.teamId = this.levelId
+        this.parameters.datetimeStr = this.formatter(new Date(),'yyyy-MM-dd HH:mm:ss')
+        this.getOnlineData = getTeamOnlineData
+        this.getHistoryData = getTeamHistoryData
+      }else if (this.level === 'anchor'){
+        this.fakeAvgData = {avgWatch: 342, avgGift: 19, avgBullet: 464, maxWatch: 745 }
+        this.parameters.anchorId = this.levelId
+        this.parameters.datetimeStr = this.formatter(new Date(),'yyyy-MM-dd HH:mm:ss')
+        this.getOnlineData = getAnchorOnlineData
+        this.getHistoryData = getAnchorHistoryData
       }
     },
 
     moment
   },
+
   created () {
     this.paramInit()
     this.refreshOnline(this.parameters)
-    this.refreshHistory(this.parameters, '2019-5-20', '2020-5-20')
+    this.refreshHistory(this.parameters, moment(moment().add(-1, 'M')).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
     this.refreshOnlineRank()
-    this.refreshHistoryRank(this.parameters, '2019-5-20', '2020-5-20')
+    this.refreshHistoryRank(this.parameters, moment(moment().add(-1, 'M')).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
     setTimeout(() => {
       this.loading = !this.loading
     }, 1000)
