@@ -34,6 +34,7 @@ import { VueCropper } from 'vue-cropper'
 import LevelTable from '@/components/PersonCommon/LevelTable'
 import TopCards from '@/components/PersonCommon/TopCards'
 import MonitorCharts from '@/components/PersonCommon/MonitorCharts'
+import HistoryCharts from '@/components/PersonCommon/HistoryCharts'
 
 export {
   AvatarList,
@@ -70,5 +71,6 @@ export {
 
   LevelTable,
   MonitorCharts,
-  TopCards
+  TopCards,
+  HistoryCharts
 }

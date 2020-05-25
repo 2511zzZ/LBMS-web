@@ -63,26 +63,32 @@ export const asyncRouterMap = [
           {
             path: '/history/total',
             name: 'historyTotal',
-            component: () => import('@/views/history/Analysis'),
+            component: () => import('@/views/history/Total'),
             meta: { title: '总览', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: '/history/branch',
             name: 'historyBranch',
-            component: () => import('@/views/history/Analysis'),
+            component: () => import('@/views/history/Branch'),
             meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: '/history/group',
             name: 'historyGroup',
-            component: () => import('@/views/history/Analysis'),
+            component: () => import('@/views/history/Group'),
             meta: { title: '大组', keepAlive: false, permission: [ 'dashboard' ] }
           },
           {
             path: '/history/team',
             name: 'historyTeam',
-            component: () => import('@/views/history/Analysis'),
+            component: () => import('@/views/history/Team'),
             meta: { title: '小组', keepAlive: false, permission: [ 'dashboard' ] }
+          },
+          {
+            path: '/history/anchor',
+            name: 'historyAnchor',
+            component: () => import('@/views/history/Anchor'),
+            meta: { title: '主播', keepAlive: false, permission: [ 'dashboard' ] }
           }
         ]
       },
