@@ -11,7 +11,7 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['login', 'register', 'registerResult'] // no redirect whitelist
-const defaultRoutePath = '/dashboard/workplace'
+const defaultRoutePath = '/online/total'
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
@@ -19,14 +19,25 @@ router.beforeEach((to, from, next) => {
   if (Vue.ls.get(ACCESS_TOKEN)) {
     /* has token */
     if (to.path === '/user/login') {
-      next({ path: defaultRoutePath })
+      if (store.getters.roleNum === 4){
+        next({ path: 'online/team' })
+      }
+      if (store.getters.roleNum === 3){
+        next({ path: 'online/group' })
+      }
+      if (store.getters.roleNum === 2){
+        next({ path: 'online/branch' })
+      }
+      if (store.getters.roleNum === 1){
+        next({ path: defaultRoutePath })
+      }
       NProgress.done()
     } else {
       if (store.getters.roles.length === 0) {
         store
           .dispatch('GetInfo')
           .then(res => {
-            const roles = res.result && res.result.role
+            const roles = res.data.role
             store.dispatch('GenerateRoutes', { roles }).then(() => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表

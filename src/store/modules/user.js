@@ -10,7 +10,8 @@ const user = {
     welcome: '',
     avatar: '',
     roles: [],
-    info: {}
+    info: {},
+    roleNum: 0
   },
 
   mutations: {
@@ -29,6 +30,9 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    SET_ROLE_NUM: (state, roleNum) => {
+      state.roleNum = roleNum
     }
   },
 
@@ -37,7 +41,6 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          console.log('session id:' + response.msg)
           Vue.ls.set(ACCESS_TOKEN, response.msg, 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', response.msg)
           test().then(response => {
@@ -53,10 +56,31 @@ const user = {
     // 获取用户信息
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          const result = response.result
-          console.log('mock info')
-          console.dir(result)
+        getLBMSInfo().then(response => {
+          const result = response.data
+          commit('SET_NAME', { name: result.name, welcome: welcome() })
+          commit('SET_AVATAR', '/' + result.avatar)
+          result.roleId = 'admin'
+          result.roleNum = result.role
+          commit('SET_ROLE_NUM', result.roleNum)
+
+          const permissionList = []
+          result.role = { permissions: [], permissionList: [] }
+
+          if(result.roleNum <= 4){
+            permissionList.push({ 'permissionId': 'team' })
+          }
+          if(result.roleNum <= 3){
+            permissionList.push({ 'permissionId': 'group' })
+          }
+          if(result.roleNum <= 2){
+            permissionList.push({ 'permissionId': 'branch' })
+          }
+          if(result.roleNum <= 1){
+            permissionList.push({ 'permissionId': 'total' })
+          }
+          result.role.permissions = permissionList
+
           if (result.role && result.role.permissions.length > 0) {
             const role = result.role
             role.permissions = result.role.permissions
@@ -67,19 +91,13 @@ const user = {
               }
             })
             role.permissionList = role.permissions.map(permission => { return permission.permissionId })
+            console.log(result)
+            console.log(result.role)
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
           } else {
             reject(new Error('getInfo: roles must be a non-null array !'))
           }
-          getLBMSInfo().then(response => {
-            const result = response.data
-            commit('SET_NAME', { name: result.name, welcome: welcome() })
-            commit('SET_AVATAR', '/' + result.avatar)
-            resolve(response)
-          }).catch(error => {
-            reject(error)
-          })
 
           // commit('SET_NAME', { name: result.name, welcome: welcome() })
           // commit('SET_AVATAR', result.avatar)

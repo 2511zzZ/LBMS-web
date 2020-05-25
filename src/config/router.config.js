@@ -17,37 +17,37 @@ export const asyncRouterMap = [
         name: 'online',
         redirect: '/online/total',
         component: RouteView,
-        meta: { title: '实时数据', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: '实时数据', keepAlive: true, icon: bxAnaalyse, permission: [ 'team' ] },
         children: [
           {
             path: '/online/total',
             name: 'onlineTotal',
             component: () => import('@/views/online/Total'),
-            meta: { title: '总览', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '总览', keepAlive: false, permission: [ 'total' ] }
           },
           {
             path: '/online/branch',
             name: 'onlineBranch',
             component: () => import('@/views/online/Branch'),
-            meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '分区', keepAlive: false, permission: [ 'branch' ] }
           },
           {
             path: '/online/group',
             name: 'onlineGroup',
             component: () => import('@/views/online/Group'),
-            meta: { title: '大组', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '大组', keepAlive: false, permission: [ 'group' ] }
           },
           {
             path: '/online/team',
             name: 'onlineTeam',
             component: () => import('@/views/online/Team'),
-            meta: { title: '小组', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '小组', keepAlive: false, permission: [ 'team' ] }
           },
           {
             path: '/online/anchor',
             name: 'onlineAnchor',
             component: () => import('@/views/online/Anchor'),
-            meta: { title: '主播', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '主播', keepAlive: false, permission: [ 'team' ] }
           }
         ]
       },
@@ -58,37 +58,37 @@ export const asyncRouterMap = [
         name: 'history',
         redirect: '/history/total',
         component: RouteView,
-        meta: { title: '历史数据', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: '历史数据', keepAlive: true, icon: bxAnaalyse, permission: [ 'team' ] },
         children: [
           {
             path: '/history/total',
             name: 'historyTotal',
             component: () => import('@/views/history/Total'),
-            meta: { title: '总览', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '总览', keepAlive: false, permission: [ 'total' ] }
           },
           {
             path: '/history/branch',
             name: 'historyBranch',
             component: () => import('@/views/history/Branch'),
-            meta: { title: '分区', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '分区', keepAlive: false, permission: [ 'branch' ] }
           },
           {
             path: '/history/group',
             name: 'historyGroup',
             component: () => import('@/views/history/Group'),
-            meta: { title: '大组', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '大组', keepAlive: false, permission: [ 'group' ] }
           },
           {
             path: '/history/team',
             name: 'historyTeam',
             component: () => import('@/views/history/Team'),
-            meta: { title: '小组', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '小组', keepAlive: false, permission: [ 'team' ] }
           },
           {
             path: '/history/anchor',
             name: 'historyAnchor',
             component: () => import('@/views/history/Anchor'),
-            meta: { title: '主播', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '主播', keepAlive: false, permission: [ 'team' ] }
           }
         ]
       },
@@ -99,13 +99,13 @@ export const asyncRouterMap = [
         name: 'report',
         redirect: '/report/statistics',
         component: PageView,
-        meta: { title: '报表统计', keepAlive: true, icon: 'table', permission: [ 'dashboard' ] },
+        meta: { title: '报表统计', keepAlive: true, icon: 'table', permission: [ 'team' ] },
         children: [
           {
             path: '/report/statistics',
             name: 'ReportStatistics',
             component: () => import('@/views/report/ReportForm'),
-            meta: { title: '报表导出', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '报表导出', keepAlive: true, permission: [ 'team' ] }
           }
         ]
       },
@@ -115,13 +115,13 @@ export const asyncRouterMap = [
         name: 'alarm',
         redirect: '/alarm/my-alarm',
         component: PageView,
-        meta: { title: '警报管理', keepAlive: true, icon: 'warning', permission: [ 'dashboard' ] },
+        meta: { title: '警报管理', keepAlive: true, icon: 'warning', permission: [ 'team' ] },
         children: [
           {
             path: '/alarm/my-alarm',
             name: 'MyAlarm',
             component: () => import('@/views/alert/Alert'),
-            meta: { title: '我的警报', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '我的警报', keepAlive: true, permission: [ 'team' ] }
           }
         ]
       },
@@ -132,13 +132,13 @@ export const asyncRouterMap = [
         name: 'Account',
         redirect: '/account2/settings',
         component: PageView,
-        meta: { title: '用户管理', keepAlive: true, icon: 'user', permission: [ 'dashboard' ] },
+        meta: { title: '用户管理', keepAlive: true, icon: 'user', permission: [ 'team' ] },
         children: [
           {
             path: '/account2/settings',
             name: 'Settings',
             component: () => import('@/views/account2/settings/Index'),
-            meta: { title: '修改信息', keepAlive: true, permission: [ 'dashboard' ] },
+            meta: { title: '修改信息', keepAlive: true, permission: [ 'team' ] },
             redirect: '/account2/settings/info',
             hideChildrenInMenu: true,
             children: [
@@ -146,13 +146,13 @@ export const asyncRouterMap = [
                 path: '/account2/settings/info',
                 name: 'ChangeInfo',
                 component: () => import('@/views/account2/settings/Info'),
-                meta: { title: '个人信息', keepAlive: true, permission: [ 'dashboard' ] }
+                meta: { title: '个人信息', keepAlive: true, permission: [ 'team' ] }
               },
               {
                 path: '/account2/settings/password',
                 name: 'ChangePassword',
                 component: () => import('@/views/account2/settings/Password'),
-                meta: { title: '修改密码', keepAlive: true, permission: [ 'dashboard' ] }
+                meta: { title: '修改密码', keepAlive: true, permission: [ 'team' ] }
               }
             ]
           }
@@ -165,13 +165,13 @@ export const asyncRouterMap = [
         name: 'system',
         redirect: '/system/settings',
         component: RouteView,
-        meta: { title: '系统管理', keepAlive: true, icon: 'setting', permission: [ 'dashboard' ] },
+        meta: { title: '系统管理', keepAlive: true, icon: 'setting', permission: [ 'total' ] },
         children: [
           {
             path: 'settings',
             name: 'settings',
             component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '系统设置', keepAlive: false, permission: [ 'dashboard' ] }
+            meta: { title: '系统设置', keepAlive: false, permission: [ 'total' ] }
           }
         ]
       },
