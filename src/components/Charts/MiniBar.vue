@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { getTotalOnlineData } from '../../api/LBMSmanage'
+import { getTotalOnlineData, getBranchOnlineData, getGroupOnlineData, getTeamOnlineData } from '../../api/LBMSmanage'
 
 export default {
   name: 'MiniBar',
@@ -32,7 +32,8 @@ export default {
   data () {
     return {
       gift:[],
-      height: 100
+      height: 100,
+      getOnlineData: () => {}
     }
   },
   methods: {
@@ -59,19 +60,36 @@ export default {
     }
   },
   created () {
-    if (this.level === 'total') {
-      getTotalOnlineData({totalId: this.levelId, datetimeStr: this.formatter(this.date,'yyyy-MM-dd HH:mm:ss')}).then(
-        res => {
-          res.datas.forEach(item => {
-            let displayTimeArray = item.time.split('  ')[1].split(':')
-            this.gift.push({
-              x: displayTimeArray[0] + ':' + displayTimeArray[1],
-              y: item.gift
-            })
-          })
-        }
-      )
+    const datetimeStr = this.formatter(this.date,'yyyy-MM-dd HH:mm:ss')
+    const parameters = {}
+    if (this.level === 'total'){
+      parameters.totalId = this.levelId
+      this.getOnlineData = getTotalOnlineData
     }
+    if (this.level === 'branch'){
+      parameters.branchId = this.levelId
+      this.getOnlineData = getBranchOnlineData
+    }
+    if (this.level === 'group'){
+      parameters.groupId = this.levelId
+      this.getOnlineData = getGroupOnlineData
+    }
+    if (this.level === 'team'){
+      parameters.teamId = this.levelId
+      this.getOnlineData = getTeamOnlineData
+    }
+    parameters.datetimeStr = datetimeStr
+    this.getOnlineData(parameters).then(
+      res => {
+        res.datas.forEach(item => {
+          let displayTimeArray = item.time.split('  ')[1].split(':')
+          this.gift.push({
+            x: displayTimeArray[0] + ':' + displayTimeArray[1],
+            y: item.gift
+          })
+        })
+      }
+    )
   }
 }
 </script>
