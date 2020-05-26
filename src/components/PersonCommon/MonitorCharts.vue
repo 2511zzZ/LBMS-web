@@ -86,7 +86,7 @@ import moment from 'moment'
 import { RankList, Bar, Trend, NumberInfo, MiniSmoothArea, STable, Ellipsis } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import "echarts/lib/component/title"
-import { getTotalOnlineData, getTotalHistoryData, getBranchHistoryRank, getBranchRank,
+import { getTotalOnlineData, getTotalHistoryData, getBranchHistoryRank, getOnlineRank,
          getBranchOnlineData, getBranchHistoryData,
          getGroupOnlineData, getGroupHistoryData,
          getTeamOnlineData, getTeamHistoryData,
@@ -186,7 +186,7 @@ export default {
 
       getOnlineData: getTotalOnlineData,
       getHistoryData: getTotalHistoryData,
-      getOnlineRank: getBranchRank,
+      getOnlineRank: getOnlineRank,
       getHistoryRank: getBranchHistoryRank,
 
       fakeAvgData: {
@@ -260,22 +260,27 @@ export default {
     },
 
     // 更新实时排行
-    refreshOnlineRank() {
-      this.getOnlineRank().then(res => {
+    refreshOnlineRank(parameters) {
+      this.getOnlineRank(parameters).then(res => {
         this.branchWatchRank = []
         this.branchGiftRank = []
         this.branchBulletRank = []
         res.datas.forEach(item => {
+          let name = this.getSubLevelName(parameters.level)
+          if(item.branchId){name = name + item.branchId}
+          if(item.groupId){name = name + item.groupId}
+          if(item.teamId){name = name + item.teamId}
+          if(item.anchorId){name = name + item.anchorId}
           this.branchWatchRank.push({
-            name: '分区' + item.branchId,
+            name: name,
             total: item.watchNum
           })
           this.branchGiftRank.push({
-            name: '分区' + item.branchId,
+            name: name,
             total: item.gift
           })
           this.branchBulletRank.push({
-            name: '分区' + item.branchId,
+            name: name,
             total: item.bulletScreen
           })
         })
@@ -293,7 +298,6 @@ export default {
 
     // 更新历史排行
     refreshHistoryRank(parameters, dateBegin, dateEnd) {
-      console.log(dateBegin, dateEnd)
         parameters.dateBeginStr = dateBegin
         parameters.dateEndStr2 = dateEnd
       this.getHistoryRank(parameters).then(res => {
@@ -356,8 +360,14 @@ export default {
       return fmt
     },
 
+    getSubLevelName (level){
+      if(level==='total'){return '分区'}
+      if(level==='branch'){return '大组'}
+      if(level==='group'){return '小组'}
+      if(level==='team' || 'anchor'){return '主播'}
+    },
+
     paramInit () {
-      // todo changeMethods
       if (this.level === 'total'){
         this.parameters.totalId = this.levelId
         this.parameters.datetimeStr = this.formatter(new Date(),'yyyy-MM-dd HH:mm:ss')
@@ -395,7 +405,8 @@ export default {
     this.paramInit()
     this.refreshOnline(this.parameters)
     this.refreshHistory(this.parameters, moment(moment().add(-1, 'M')).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
-    this.refreshOnlineRank()
+    // anchor与team视图相同
+    this.refreshOnlineRank({ level:this.level, levelId:this.levelId })
     this.refreshHistoryRank(this.parameters, moment(moment().add(-1, 'M')).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
     setTimeout(() => {
       this.loading = !this.loading

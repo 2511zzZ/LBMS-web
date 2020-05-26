@@ -70,10 +70,11 @@ export function getAnchorOnlineData(parameters) {
   })
 }
 
-export function getBranchRank () {
+export function getOnlineRank (parameters) {
   return LBMSaxios({
-    url: 'totalData/onlineRank',
-    method: 'get'
+    url: 'online/rank',
+    method: 'get',
+    params: parameters
   })
 }
 

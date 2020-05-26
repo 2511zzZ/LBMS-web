@@ -48,11 +48,11 @@ import moment from 'moment'
 import { RankList, Bar, Trend, NumberInfo, MiniSmoothArea, STable, Ellipsis } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import "echarts/lib/component/title"
-import { getTotalOnlineData, getTotalHistoryData, getBranchHistoryRank, getBranchRank,
-         getBranchOnlineData, getBranchHistoryData,
-         getGroupOnlineData, getGroupHistoryData,
-         getTeamOnlineData, getTeamHistoryData,
-         getAnchorOnlineData, getAnchorHistoryData} from '../../api/LBMSmanage'
+import { getTotalHistoryData, getBranchHistoryRank,
+         getBranchHistoryData,
+         getGroupHistoryData,
+         getTeamHistoryData,
+         getAnchorHistoryData} from '../../api/LBMSmanage'
 
 export default {
   name: 'HistoryCharts',
