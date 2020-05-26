@@ -16,6 +16,7 @@
 
 <script>
 import types from './type'
+import store from '../../store'
 
 export default {
   name: 'Exception',
@@ -32,8 +33,24 @@ export default {
   },
   methods: {
     handleToHome () {
-      this.$router.push({ name: 'dashboard' })
-    }
+      console.log(store.getters.roleNum)
+      console.log(this.getRedirectPath(store.getters.roleNum))
+      this.$router.push(this.getRedirectPath(store.getters.roleNum))
+    },
+    getRedirectPath (roleNum){
+  if (roleNum === 4){
+    return 'online/team'
+  }
+  if (roleNum === 3){
+    return 'online/group'
+  }
+  if (roleNum === 2){
+    return 'online/branch'
+  }
+  if (roleNum === 1){
+    return 'online/total'
+  }
+}
   }
 }
 </script>

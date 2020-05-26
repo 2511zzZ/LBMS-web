@@ -13,24 +13,28 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['login', 'register', 'registerResult'] // no redirect whitelist
 const defaultRoutePath = '/online/total'
 
+function getRedirectPath (roleNum){
+  if (roleNum === 4){
+    return 'online/team'
+  }
+  if (roleNum === 3){
+    return 'online/group'
+  }
+  if (roleNum === 2){
+    return 'online/branch'
+  }
+  if (roleNum === 1){
+    return 'online/total'
+  }
+}
+
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
   if (Vue.ls.get(ACCESS_TOKEN)) {
     /* has token */
     if (to.path === '/user/login') {
-      if (store.getters.roleNum === 4){
-        next({ path: 'online/team' })
-      }
-      if (store.getters.roleNum === 3){
-        next({ path: 'online/group' })
-      }
-      if (store.getters.roleNum === 2){
-        next({ path: 'online/branch' })
-      }
-      if (store.getters.roleNum === 1){
-        next({ path: defaultRoutePath })
-      }
+      next({ path: getRedirectPath(store.getters.roleNum) })
       NProgress.done()
     } else {
       if (store.getters.roles.length === 0) {

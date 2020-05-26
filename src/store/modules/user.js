@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { login, getInfo, logout, test, getLBMSInfo } from '@/api/login'
+import { login, logout, test, getLBMSInfo } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 import { getLevelId } from '@/api/LBMSmanage'
@@ -66,6 +66,11 @@ const user = {
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
         getLBMSInfo().then(response => {
+
+          getLevelId().then(result => {
+            commit('SET_LEVEL_NUM', result.data)
+          })
+
           const result = response.data
           commit('SET_NAME', { name: result.name, welcome: welcome() })
           commit('SET_AVATAR', '/' + result.avatar)
@@ -114,9 +119,6 @@ const user = {
         }).catch(error => {
           reject(error)
         })
-        getLevelId().then(result => {
-          commit('SET_LEVEL_NUM', result.data)
-        })
       })
     },
 
@@ -130,6 +132,10 @@ const user = {
         }).finally(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
+          commit('SET_INFO', {})
+          commit('SET_ROLE_NUM', 0)
+          commit('SET_LEVEL_NUM', 0)
+          commit('SET_ALARM_NUM', 0)
           Vue.ls.remove(ACCESS_TOKEN)
         })
       })

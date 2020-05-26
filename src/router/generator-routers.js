@@ -66,7 +66,7 @@ const rootRouter = {
   name: 'index',
   path: '',
   component: 'BasicLayout',
-  redirect: '/dashboard',
+  redirect: '/online/team',
   meta: {
     title: '首页'
   },
