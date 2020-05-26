@@ -1,17 +1,17 @@
 <template>
   <a-row :gutter="24">
     <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-      <chart-card :loading="loading" title="在线主播数" total="6,560">
+      <chart-card :loading="loading" title="在线主播数" :total="OnlineAnchorNum">
         <a-tooltip title="指标说明" slot="action">
           <a-icon type="info-circle-o" />
         </a-tooltip>
         <div>
-          昨日开播主播总数  <span>12934</span>
+          昨日开播主播总数  <span>{{yesterdayAnchorSum}}</span>
         </div>
       </chart-card>
     </a-col>
     <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-      <chart-card :loading="loading" title="在线主播比例" total="78%">
+      <chart-card :loading="loading" title="在线主播比例" :total="OnlineAnchorPercent">
         <a-tooltip title="指标说明" slot="action">
           <a-icon type="info-circle-o" />
         </a-tooltip>
@@ -46,7 +46,8 @@
 <script>
 import { ChartCard, MiniArea, MiniBar, MiniProgress } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
-import { getLastTotalOnlineData } from '../../api/LBMSmanage'
+import { getTopCardsData } from '../../api/LBMSmanage'
+import store from '../../store'
 
 export default {
   name: 'TopCards',
@@ -57,25 +58,15 @@ export default {
     MiniBar,
     MiniProgress
   },
-  props: {
-    level: {
-      type: String,
-      required: true
-    },
-    levelId: {
-      type: Number,
-      required: true
-    },
-    date: {
-      type: Date,
-      required: false,
-      default: () => { return new Date() }
-    }
-  },
   data () {
     return {
 
+      level: 'team',
+      levelId: 1,
       // 顶部实时数据
+      OnlineAnchorNum: 0,
+      OnlineAnchorPercent: '',
+      yesterdayAnchorSum: 0,
       totalWatch: 0,
       totalGift: 0,
 
@@ -83,21 +74,36 @@ export default {
     }
   },
   methods: {
-
-    // todo 主播总数与开播比例数据
-
     // 更新顶部总览数据
     refreshTopCard() {
-      if (this.level==='total') {
-        getLastTotalOnlineData().then(res => {
-          this.totalWatch = res.data.watchNum
-          this.totalGift = res.data.gift
-        })
+      getTopCardsData().then(res => {
+        this.OnlineAnchorNum = res.data.onlineAnchorNum
+        this.yesterdayAnchorSum = res.data.yesterdayOnlineAnchorNum
+        this.OnlineAnchorPercent = res.data.onlineAnchorPercent + '%'
+        this.totalWatch = res.data.onlineWatcher
+        this.totalGift = res.data.giftNum
+      })
+    },
+
+    getLevel() {
+      if (store.getters.roleNum===1){
+        this.level = 'total'
       }
+      if (store.getters.roleNum===2){
+        this.level = 'branch'
+      }
+      if (store.getters.roleNum===3){
+        this.level = 'group'
+      }
+      if (store.getters.roleNum===4){
+        this.level = 'team'
+      }
+      this.levelId = store.getters.levelNum
     },
 
   },
   created () {
+    this.getLevel()
     this.refreshTopCard()
     setTimeout(() => {
       this.loading = !this.loading

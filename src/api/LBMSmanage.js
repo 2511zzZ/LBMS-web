@@ -85,13 +85,6 @@ export function getBranchHistoryRank (parameters) {
   })
 }
 
-export function getLastTotalOnlineData () {
-  return LBMSaxios({
-    url: 'totalData/lastOnlineData',
-    method: 'get'
-  })
-}
-
 export function getTotalHistoryData (parameters) {
   return LBMSaxios({
     url: 'totalData/historys',
@@ -191,5 +184,20 @@ export function getAnchorList (parameters) {
     url: '/anchor/list',
     method: 'get',
     params: parameters
+  })
+}
+
+export function getLevelId () {
+  return LBMSaxios({
+    url: 'levelId',
+    method: 'get'
+  })
+}
+
+
+export function getTopCardsData () {
+  return LBMSaxios({
+    url: '/online/data',
+    method: 'get'
   })
 }

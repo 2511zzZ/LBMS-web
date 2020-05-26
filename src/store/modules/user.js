@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { login, getInfo, logout, test, getLBMSInfo } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
+import { getLevelId } from '@/api/LBMSmanage'
 
 const user = {
   state: {
@@ -11,7 +12,9 @@ const user = {
     avatar: '',
     roles: [],
     info: {},
-    roleNum: 0
+    roleNum: 0,
+    levelNum: 0,
+    alarmNum: 0
   },
 
   mutations: {
@@ -33,6 +36,12 @@ const user = {
     },
     SET_ROLE_NUM: (state, roleNum) => {
       state.roleNum = roleNum
+    },
+    SET_LEVEL_NUM: (state, levelNum) => {
+      state.levelNum = levelNum
+    },
+    SET_ALARM_NUM: (state, alarmNum) => {
+      state.alarmNum = alarmNum
     }
   },
 
@@ -104,6 +113,9 @@ const user = {
           resolve(response)
         }).catch(error => {
           reject(error)
+        })
+        getLevelId().then(result => {
+          commit('SET_LEVEL_NUM', result.data)
         })
       })
     },

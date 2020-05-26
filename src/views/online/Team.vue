@@ -1,9 +1,9 @@
 <template>
   <div class="page-header-index-wide">
 
-    <top-cards :level="tableParams.level" :levelId="tableParams.levelId"></top-cards>
+    <top-cards></top-cards>
 
-    <a-radio-group v-model="currentTab" :style="{ marginBottom: '0px' }">
+    <a-radio-group v-model="currentTab" :style="{ marginBottom: '0px' }" v-if="radioShow">
       <a-radio-button value="search">搜索</a-radio-button>
       <a-radio-button value="monitor" :disabled="disabled">监控</a-radio-button>
     </a-radio-group>
@@ -29,6 +29,7 @@
 import { TopCards, MonitorCharts, LevelTable } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import "echarts/lib/component/title"
+import store from '../../store'
 
 export default {
   name: 'Team',
@@ -42,14 +43,11 @@ export default {
     return {
 
       monitorAlive:true,
-      // 层级数据
-      tableParams: {
-        level: 'total',
-        levelId: 1
-      },
+
+      radioShow: true,
       monitorParams: {
         level: 'team',
-        levelId: 1
+        levelId: store.getters.levelNum
       },
 
       // 搜索/监控 tab标签
@@ -69,10 +67,13 @@ export default {
 
       this.monitorAlive = false
       this.$nextTick(() => (this.monitorAlive = true))
-    },
+    }
   },
   created () {
-    console.log(this.monitorParams.level)
+    if (store.getters.roleNum===4){
+      this.radioShow = false
+      this.currentTab = 'monitor'
+    }
     setTimeout(() => {
       this.loading = !this.loading
     }, 1000)
