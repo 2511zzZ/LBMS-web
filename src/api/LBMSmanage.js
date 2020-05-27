@@ -202,3 +202,11 @@ export function getTopCardsData () {
     method: 'get'
   })
 }
+
+export function getReportFile (parameters) {
+  return LBMSaxios({
+    url: '/report',
+    method: 'get',
+    params: parameters
+  })
+}

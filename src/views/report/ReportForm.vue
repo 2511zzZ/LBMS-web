@@ -8,83 +8,48 @@
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
           <a-select
             v-decorator="[
-          'type',
+          'level',
           { rules: [{ required: true, message: '请选择报表类型!' }] },
         ]"
           >
-            <a-select-option value="alert" v-if="isDpt">
-              警报
+<!--            <a-select-option value="alert" v-if="isTotal">-->
+<!--              警报-->
+<!--            </a-select-option>-->
+            <a-select-option value="total" v-if="isTotal">
+              全部直播
             </a-select-option>
-            <a-select-option value="dpt" v-if="isDpt">
-              生产部
-            </a-select-option>
-            <a-select-option value="workshop" v-if="isWorkshop">
-              车间
+            <a-select-option value="branch" v-if="isBranch">
+              分区
             </a-select-option>
             <a-select-option value="group" v-if="isGroup">
               大组
             </a-select-option>
             <a-select-option value="team">
-              分区
-            </a-select-option>
-            <a-select-option value="stat">
-              大组
-            </a-select-option>
-            <a-select-option value="worker">
               小组
             </a-select-option>
-            <a-select-option value="worker">
+            <a-select-option value="anchor">
               主播
             </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item
-          label="报表对象"
+          label="层级编号"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
           <div>
-            <!--          <div :style="{ borderBottom: '1px solid #E9E9E9' }">-->
-            <a-checkbox
-              :indeterminate="indeterminate"
-              disabled
-              @change="onCheckAllChange"
-              :checked="checkAll"
-              v-decorator="['all_id']"
-            >
-              全选
-            </a-checkbox>
-            <!--          </div>-->
-            <!--          <a-checkbox-group :options="plainOptions" v-model="checkedList" @change="onChange" />-->
+            <a-input v-model="levelId" v-decorator="['levelId']"></a-input>
           </div>
         </a-form-item>
         <a-form-item
           label="统计月份"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-          help="暂时只支持导出上月报表"
         >
           <a-month-picker
-            :defaultValue="moment(yearNow+'/'+monthNow, monthFormat)"
             :format="monthFormat"
-            disabled
             v-decorator="[
-            'buildMonth',
-            {rules: [{ required: false, message: '请选择统计月份' }]}]"
-          />
-        </a-form-item>
-        <a-form-item
-          hidden
-          label="起止日期"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-          <a-range-picker
-            name="buildTime"
-            style="width: 100%"
-            disabled
-            v-decorator="[
-            'buildTime',
-            {rules: [{ required: false, message: '请选择起止日期' }]}
-          ]" />
+            'moment',
+            {rules: [{ required: true, message: '请选择统计月份' }]}]"></a-month-picker>
         </a-form-item>
         <a-form-item
           label="报表格式"
@@ -94,7 +59,7 @@
         >
           <a-radio-group
             v-model="value"
-            v-decorator="['FileType']"
+            v-decorator="['type']"
           >
             <a-radio :value="1">excel</a-radio>
             <a-radio :value="2">pdf</a-radio>
@@ -131,6 +96,7 @@
 
 <script>
 import moment from 'moment'
+import { getReportFile } from '../../api/LBMSmanage'
 
 const plainOptions = ['工位1', '工位2', '工位3', '...']
 const defaultCheckedList = ['工位1', '工位3']
@@ -139,15 +105,13 @@ export default {
   name: 'ReportForm',
   data () {
     return {
-      level: this.$store.state.user.level,
-      isDpt: this.$store.state.user.level === 'dpt',
-      isWorkshop: this.$store.state.user.level === 'workshop' | this.$store.state.user.level === 'dpt',
-      isGroup: this.$store.state.user.level === 'workshop' | this.$store.state.user.level === 'dpt' | this.$store.state.user.level === 'group',
+      isTotal: this.$store.state.user.roleNum <= 1,
+      isBranch: this.$store.state.user.roleNum <= 2,
+      isGroup: this.$store.state.user.roleNum <= 3,
+      levelId: null,
       spinning: false,
       fileLink: null,
       fileDone: '',
-      yearNow: date.getFullYear(),
-      monthNow: date.getMonth(),
       visible: false,
       checkedList: defaultCheckedList,
       indeterminate: true,
@@ -166,13 +130,19 @@ export default {
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
-          // eslint-disable-next-line no-console
           this.visible = true
           this.spinning = true
+          values.type = values.type === 1 ? 'excel' : 'pdf'
+          values.datetimeStr = values.moment.format("YYYY-MM-DD")
+          delete values.moment
           getReportFile(values).then(res => {
             this.spinning = false
             this.fileDone = '报表已生成, 点击下载或查看'
-            this.fileLink = res.result.url
+            console.log(res.data)
+            this.fileLink = res.data
+          }).catch(err => {
+            this.$message.error('权限不足')
+            this.visible = false
           })
         }
       })
