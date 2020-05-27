@@ -86,8 +86,9 @@ import moment from 'moment'
 import { RankList, Bar, Trend, NumberInfo, MiniSmoothArea, STable, Ellipsis } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import "echarts/lib/component/title"
-import { getTotalOnlineData, getTotalHistoryData, getBranchHistoryRank, getOnlineRank,
-         getBranchOnlineData, getBranchHistoryData,
+import { getOnlineRank, getHistoryRank,
+        getTotalOnlineData, getTotalHistoryData,
+        getBranchOnlineData, getBranchHistoryData,
          getGroupOnlineData, getGroupHistoryData,
          getTeamOnlineData, getTeamHistoryData,
          getAnchorOnlineData, getAnchorHistoryData} from '../../api/LBMSmanage'
@@ -186,8 +187,6 @@ export default {
 
       getOnlineData: getTotalOnlineData,
       getHistoryData: getTotalHistoryData,
-      getOnlineRank: getOnlineRank,
-      getHistoryRank: getBranchHistoryRank,
 
       fakeAvgData: {
         avgWatch: 2502347,
@@ -260,17 +259,21 @@ export default {
     },
 
     // 更新实时排行
-    refreshOnlineRank(parameters) {
-      this.getOnlineRank(parameters).then(res => {
+    refreshOnlineRank() {
+      const parameters = { level:this.level, levelId:this.levelId }
+
+      getOnlineRank(parameters).then(res => {
         this.branchWatchRank = []
         this.branchGiftRank = []
         this.branchBulletRank = []
         res.datas.forEach(item => {
+
           let name = this.getSubLevelName(parameters.level)
           if(item.branchId){name = name + item.branchId}
           if(item.groupId){name = name + item.groupId}
           if(item.teamId){name = name + item.teamId}
           if(item.anchorId){name = name + item.anchorId}
+
           this.branchWatchRank.push({
             name: name,
             total: item.watchNum
@@ -297,24 +300,36 @@ export default {
     },
 
     // 更新历史排行
-    refreshHistoryRank(parameters, dateBegin, dateEnd) {
-        parameters.dateBeginStr = dateBegin
-        parameters.dateEndStr2 = dateEnd
-      this.getHistoryRank(parameters).then(res => {
+    refreshHistoryRank(beginStr, endStr) {
+      const parameters = {
+        level: this.level,
+        levelId: this.levelId,
+        dateBeginStr: beginStr ? beginStr : moment(moment().add(-1, 'M')).format('YYYY-MM-DD'),
+        dateEndStr2: endStr ? endStr : moment().format('YYYY-MM-DD')
+      }
+      console.log(parameters)
+      getHistoryRank(parameters).then(res => {
         this.branchHistoryWatchRank = []
         this.branchHistoryGiftRank = []
         this.branchHistoryBulletRank = []
+
         res.datas.forEach(item => {
+          let name = this.getSubLevelName(parameters.level)
+          if(item.branchId){name = name + item.branchId}
+          if(item.groupId){name = name + item.groupId}
+          if(item.teamId){name = name + item.teamId}
+          if(item.anchorId){name = name + item.anchorId}
+
           this.branchHistoryWatchRank.push({
-            name: '分区' + item.branchId,
+            name: name,
             total: item.watchNum
           })
           this.branchHistoryGiftRank.push({
-            name: '分区' + item.branchId,
+            name: name,
             total: item.gift
           })
           this.branchHistoryBulletRank.push({
-            name: '分区' + item.branchId,
+            name: name,
             total: item.bulletScreen
           })
         })
@@ -335,7 +350,7 @@ export default {
       const endStr = timeStrList[1]
       console.log(beginStr, endStr)
       this.refreshHistory(this.parameters, beginStr, endStr)
-      this.refreshHistoryRank(this.parameters,beginStr, endStr)
+      this.refreshHistoryRank(beginStr, endStr)
     },
 
     formatter (thistime, fmt) {
@@ -406,8 +421,8 @@ export default {
     this.refreshOnline(this.parameters)
     this.refreshHistory(this.parameters, moment(moment().add(-1, 'M')).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
     // anchor与team视图相同
-    this.refreshOnlineRank({ level:this.level, levelId:this.levelId })
-    this.refreshHistoryRank(this.parameters, moment(moment().add(-1, 'M')).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
+    this.refreshOnlineRank()
+    this.refreshHistoryRank()
     setTimeout(() => {
       this.loading = !this.loading
     }, 1000)

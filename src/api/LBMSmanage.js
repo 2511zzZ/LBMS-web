@@ -78,9 +78,9 @@ export function getOnlineRank (parameters) {
   })
 }
 
-export function getBranchHistoryRank (parameters) {
+export function getHistoryRank (parameters) {
   return LBMSaxios({
-    url: 'totalData/historyRank',
+    url: 'history/rank',
     method: 'get',
     params: parameters
   })
