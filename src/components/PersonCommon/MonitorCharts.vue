@@ -426,6 +426,16 @@ export default {
     setTimeout(() => {
       this.loading = !this.loading
     }, 1000)
+  },
+
+  // 每分钟轮询
+  mounted () {
+    window.setInterval(() => {
+      setTimeout(
+        this.paramInit(),
+        this.refreshOnline(this.parameters),
+        0)
+    }, 60*1000)
   }
 }
 </script>

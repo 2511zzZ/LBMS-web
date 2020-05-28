@@ -26,17 +26,15 @@
   </div>
 </template>
 <script>
-import { TopCards, MonitorCharts, LevelTable } from '@/components'
+import { MonitorCharts, LevelTable } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import "echarts/lib/component/title"
-import { getLevelId } from '../../api/LBMSmanage'
 import store from '../../store'
 
 export default {
   name: 'Branch',
   mixins: [mixinDevice],
   components: {
-    TopCards,
     MonitorCharts,
     LevelTable
   },

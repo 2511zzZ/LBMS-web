@@ -27,7 +27,6 @@
 import { TopCards, LevelTable, HistoryCharts } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import "echarts/lib/component/title"
-import { getLevelId } from '../../api/LBMSmanage'
 import store from '../../store'
 
 export default {
