@@ -149,6 +149,14 @@ export function updateAlert (parameters) {
   })
 }
 
+export function banAnchor (parameters) {
+  return LBMSaxios({
+    url: '/anchor/ban/alarm',
+    method: 'post',
+    data: Qs.stringify(parameters)
+  })
+}
+
 export function deleteAlert (parameters) {
   return LBMSaxios({
     url: '/alarm/delete',
@@ -206,6 +214,14 @@ export function getTopCardsData () {
 export function getReportFile (parameters) {
   return LBMSaxios({
     url: '/report',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function getAlertTransfer (parameters) {
+  return LBMSaxios({
+    url: '/alarm/transform',
     method: 'get',
     params: parameters
   })

@@ -38,6 +38,9 @@
           <div slot="actions">
             <a @click="handleMark(item.alarmId, item.alarm.status)">{{ item.alarm.status===1 ? '标记' : '删除' }}</a>
           </div>
+          <div slot="actions" v-if="item.alarm.status===1">
+            <a @click="handleBanned(item.alarmId, item.alarm.status)">{{ '封禁' }}</a>
+          </div>
           <div slot="actions">
             <a-dropdown>
               <a>更多<a-icon type="down"/></a>
@@ -80,14 +83,21 @@
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import { getAlertList, getAlertOverView, updateAlert, deleteAlert } from '../../api/LBMSmanage'
+import {
+  getAlertList,
+  getAlertOverView,
+  updateAlert,
+  deleteAlert,
+  banAnchor,
+  getAlertTransfer
+} from '../../api/LBMSmanage'
 import store from '../../store'
 
 const alertStep = [
+  { title: '小组长', description: '', status: 'waiting' },
   { title: '大组长', description: '', status: 'waiting' },
   { title: '经理', description: '', status: 'waiting' },
-  { title: '总经理', description: '', status: 'waiting' },
-  { title: '关闭', description: '', status: 'waiting' }
+  { title: '总经理', description: '', status: 'waiting' }
 ]
 
 export default {
@@ -160,39 +170,30 @@ export default {
     },
     handleDetails (alertId) {
       this.alertStep = [
+        { title: '小组长', description: '', status: 'waiting' },
         { title: '大组长', description: '', status: 'waiting' },
         { title: '经理', description: '', status: 'waiting' },
-        { title: '总经理', description: '', status: 'waiting' },
-        { title: '关闭', description: '', status: 'waiting' }
+        { title: '总经理', description: '', status: 'waiting' }
       ]
       this.visible = true
-      getAlertTransfer(alertId).then(res => {
-        res = res.result
-        const alertTransfer = res
+      getAlertTransfer({ alarmId: alertId }).then(res => {
+        const alertTransfer = res.data
         if (alertTransfer.status === 1) { // 待处理
-          for (let i = 0; i < alertTransfer.transfer_way.length - 1; i++) {
-            this.alertStep[i].title = alertTransfer.transfer_way[i].role_name + ' : ' + alertTransfer.transfer_way[i].deal_employee_name
-            this.alertStep[i].description = alertTransfer.transfer_way[i].time.split('.')[0].replace('T', ' ')
+          for (let i = 0; i < alertTransfer.anchorAlarmTransWay.length; i++) {
+            this.alertStep[i].title = this.getLevelName(alertTransfer.anchorAlarmTransWay[i].role) + ' : ' + alertTransfer.anchorAlarmTransWay[i].username
+            this.alertStep[i].description = alertTransfer.anchorAlarmTransWay[i].time.split('.')[0].replace('T', ' ')
             this.alertStep[i].status = 'process'
           }
         } else if (alertTransfer.status === 2) { // 已处理
-          for (let i = 0; i < alertTransfer.transfer_way.length - 1; i++) {
-            this.alertStep[i].title = alertTransfer.transfer_way[i].role_name + ' : ' + alertTransfer.transfer_way[i].deal_employee_name
-            this.alertStep[i].description = alertTransfer.transfer_way[i].time
+          for (let i = 0; i < alertTransfer.anchorAlarmTransWay.length; i++) {
+            this.alertStep[i].title = this.getLevelName(alertTransfer.anchorAlarmTransWay[i].role) + ' : ' + alertTransfer.anchorAlarmTransWay[i].username
+            this.alertStep[i].description = alertTransfer.anchorAlarmTransWay[i].time.split('.')[0].replace('T', ' ')
             this.alertStep[i].status = 'process'
           }
-          const role = alertTransfer.transfer_way[alertTransfer.transfer_way.length - 1].role_id
-          this.alertStep[role - 2].status = 'finish'
-          this.alertStep[role - 2].description = '处理时间' + alertTransfer.transfer_way[alertTransfer.transfer_way.length - 1].end_time.split('.')[0].replace('T', ' ')
-        } else if (alertTransfer.status === 3) { // 已超时
-          for (let i = 0; i < alertTransfer.transfer_way.length - 1; i++) {
-            this.alertStep[i].title = alertTransfer.transfer_way[i].role_name + ' : ' + alertTransfer.transfer_way[i].deal_employee_name
-            this.alertStep[i].description = alertTransfer.transfer_way[i].time.replace('T', ' ').split('.')[0]
-            this.alertStep[i].status = 'process'
-          }
-          this.alertStep[3].description = alertTransfer.transfer_way[3].end_time.replace('T', ' ').split('.')[0]
-          this.alertStep[3].status = 'error'
-          this.alertStep[3].title = '已关闭'
+          // magic number: 4
+          // 如果处理层级为3 即大组长处理 则按alertStep的顺序将第2项（索引为1）的status置为finish
+          // 其他情况依此类推 index = 4 - finalDealLevel
+          this.alertStep[4 - alertTransfer.finalDealLevel].status = 'finish'
         }
       })
     },
@@ -216,6 +217,22 @@ export default {
         })
       }
     },
+
+    handleBanned (alertId, status) {
+      if (status === 1) {
+        this.$store.commit('SET_ALARM_NUM', store.getters.alarmNum - 1)
+        const parameters = { alarmId: alertId, operation: 2 }
+        banAnchor({ alarmId: alertId })
+        updateAlert(parameters).then(res => {
+          this.getOverView()
+          this.alertClassify(status)
+          this.$message.success('主播封禁成功!')
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      }
+    },
+
     getOverView () {
       getAlertOverView().then(res => {
         res = res.data
@@ -223,6 +240,13 @@ export default {
         this.alertOverView.completed_alerts_this_month = res.doneNum + '条警报'
         this.alertOverView.avg_process_duration_this_month = res.avgDealCost === '0' ? '暂无' : Math.floor(res.avgDealCost / 60) + '分' + res.avgDealCost%60 + '秒'
       })
+    },
+
+    getLevelName (role) {
+      if(role===4){return '小组长'}
+      if(role===3){return '大组长'}
+      if(role===2){return '经理'}
+      if(role===1){return '总经理'}
     }
   }
 }
