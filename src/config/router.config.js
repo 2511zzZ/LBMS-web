@@ -93,6 +93,23 @@ export const asyncRouterMap = [
         ]
       },
 
+      // anchor
+      {
+        path: 'anchor',
+        name: 'anchor',
+        redirect: '/anchor/manage',
+        component: RouteView,
+        meta: { title: '主播管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'team' ] },
+        children: [
+          {
+            path: '/anchor/manage',
+            name: 'anchorManage',
+            component: () => import('@/views/anchor/Anchor'),
+            meta: { title: '主播详情', keepAlive: false, permission: [ 'team' ] }
+          }
+        ]
+      },
+
       // report
       {
         path: '/report',

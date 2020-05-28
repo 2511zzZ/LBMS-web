@@ -156,6 +156,29 @@ export function banAnchor (parameters) {
     data: Qs.stringify(parameters)
   })
 }
+export function banAnchorById (parameters) {
+  return LBMSaxios({
+    url: '/anchor/ban/id',
+    method: 'post',
+    data: Qs.stringify(parameters)
+  })
+}
+
+export function getAnchor (parameters) {
+  return LBMSaxios({
+    url: '/anchor/',
+    method: 'get',
+    params: parameters
+  })
+}
+
+export function changeAnchor (parameters) {
+  return LBMSaxios({
+    url: '/anchor/',
+    method: 'post',
+    data: Qs.stringify(parameters)
+  })
+}
 
 export function deleteAlert (parameters) {
   return LBMSaxios({
