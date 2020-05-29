@@ -249,3 +249,40 @@ export function getAlertTransfer (parameters) {
     params: parameters
   })
 }
+
+export function getMaxAlarmNum () {
+  return LBMSaxios({
+    url: '/alarm/settings/maxAlarmNum',
+    method: 'get'
+  })
+}
+
+export function getAlarmThreshold () {
+  return LBMSaxios({
+    url: '/alarm/settings/threshold',
+    method: 'get'
+  })
+}
+
+export function setAlarmConfig (parameters) {
+  return LBMSaxios({
+    url: '/alarm/settings',
+    method: 'post',
+    data: Qs.stringify(parameters)
+  })
+}
+
+export function getAlarmTransTime () {
+  return LBMSaxios({
+    url: '/alarm/transform/settings/',
+    method: 'get'
+  })
+}
+
+export function setAlarmTransTime (parameters) {
+  return LBMSaxios({
+    url: '/alarm/transform/settings/',
+    method: 'post',
+    data: Qs.stringify(parameters)
+  })
+}

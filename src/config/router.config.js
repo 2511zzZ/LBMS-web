@@ -58,7 +58,7 @@ export const asyncRouterMap = [
         name: 'history',
         redirect: '/history/total',
         component: RouteView,
-        meta: { title: '历史数据', keepAlive: true, icon: bxAnaalyse, permission: [ 'team' ] },
+        meta: { title: '历史数据', keepAlive: true, icon: 'history', permission: [ 'team' ] },
         children: [
           {
             path: '/history/total',
@@ -99,7 +99,7 @@ export const asyncRouterMap = [
         name: 'anchor',
         redirect: '/anchor/manage',
         component: RouteView,
-        meta: { title: '主播管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'team' ] },
+        meta: { title: '主播管理', keepAlive: true, icon: 'user', permission: [ 'team' ] },
         children: [
           {
             path: '/anchor/manage',
@@ -178,17 +178,33 @@ export const asyncRouterMap = [
 
       // system
       {
-        path: 'system',
-        name: 'system',
+        path: '/system',
+        component: PageView,
         redirect: '/system/settings',
-        component: RouteView,
-        meta: { title: '系统管理', keepAlive: true, icon: 'setting', permission: [ 'total' ] },
+        name: 'system',
+        meta: { title: '系统管理', icon: 'setting', keepAlive: true, permission: [ 'team' ] },
         children: [
           {
-            path: 'settings',
-            name: 'settings',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '系统设置', keepAlive: false, permission: [ 'total' ] }
+            path: '/system/settings',
+            name: 'SystemSettings',
+            component: () => import('@/views/system/settings/Index'),
+            meta: { title: '系统设置', hideHeader: true, permission: [ 'team' ] },
+            redirect: '/system/settings/alert',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/system/settings/alert',
+                name: 'AlertSettings',
+                component: () => import('@/views/system/settings/alert'),
+                meta: { title: '警报设置', keepAlive: true, permission: [ 'team' ] }
+              },
+              {
+                path: '/system/settings/transmit',
+                name: 'TransmitSettings',
+                component: () => import('@/views/system/settings/alertTransmit'),
+                meta: { title: '警报传递设置', keepAlive: true, permission: [ 'team' ] }
+              }
+            ]
           }
         ]
       },
