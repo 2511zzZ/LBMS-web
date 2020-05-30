@@ -90,10 +90,12 @@ export default {
   },
   watch: {
     '$store.state.user.alarmNum': function () {
-      this.alarmNum = this.$store.state.user.alarmNum
+      // this.alarmNum = this.$store.state.user.alarmNum
+      // this.alarmNum = store.getters.alarmNum
       //
       getAlertList({ status: 1 }).then(res => {
         this.$store.commit('SET_ALARM_NUM', res.datas.length)
+        this.alarmNum = store.getters.alarmNum
         const alarmList = res.datas
         this.dataList.list = []
         for(let i = 0;i < alarmList.length; i++){
@@ -163,6 +165,7 @@ export default {
   },
   created () {
     this.initWebSocket()
+    this.alarmNum = store.getters.alarmNum
     getAlertList({ status: 1 }).then(res => {
       this.$store.commit('SET_ALARM_NUM', res.datas.length)
       const alarmList = res.datas

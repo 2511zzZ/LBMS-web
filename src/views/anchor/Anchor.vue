@@ -2,7 +2,7 @@
   <div>
     <a-radio-group v-model="currentTab" :style="{ marginBottom: '0px' }">
       <a-radio-button value="search">搜索</a-radio-button>
-      <a-radio-button value="manage">管理</a-radio-button>
+      <a-radio-button value="manage" :disabled="disabled">管理</a-radio-button>
     </a-radio-group>
 
     <a-tabs v-model="currentTab">

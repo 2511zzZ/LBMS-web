@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="content-box">
-      <a href="https://pro.loacg.com/docs/getting-started" target="_blank">
+      <a @click="handleClick">
         <span class="action">
           <a-icon type="question-circle-o"></a-icon>
         </span>
@@ -14,20 +14,10 @@
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
           <a-menu-item key="0">
-            <router-link :to="{ name: 'center' }">
+            <router-link :to="{ name: 'Account' }">
               <a-icon type="user"/>
               <span>个人中心</span>
             </router-link>
-          </a-menu-item>
-          <a-menu-item key="1">
-            <router-link :to="{ name: 'settings' }">
-              <a-icon type="setting"/>
-              <span>账户设置</span>
-            </router-link>
-          </a-menu-item>
-          <a-menu-item key="2" disabled>
-            <a-icon type="setting"/>
-            <span>测试</span>
           </a-menu-item>
           <a-menu-divider/>
           <a-menu-item key="3">
@@ -39,6 +29,13 @@
         </a-menu>
       </a-dropdown>
     </div>
+    <a-modal
+      title="反 馈"
+      v-model="visible"
+      @ok="handleOk"
+    >
+      有问题请联系管理员：2511672322@qq.com
+    </a-modal>
   </div>
 </template>
 
@@ -50,6 +47,11 @@ export default {
   name: 'UserMenu',
   components: {
     NoticeIcon
+  },
+  data() {
+    return {
+      visible: false
+    }
   },
   computed: {
     ...mapGetters(['nickname', 'avatar'])
@@ -76,6 +78,12 @@ export default {
         onCancel () {
         }
       })
+    },
+    handleClick () {
+      this.visible = true
+    },
+    handleOk () {
+      this.visible = false
     }
   }
 }

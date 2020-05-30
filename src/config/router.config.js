@@ -99,7 +99,7 @@ export const asyncRouterMap = [
         name: 'anchor',
         redirect: '/anchor/manage',
         component: RouteView,
-        meta: { title: '主播管理', keepAlive: true, icon: 'user', permission: [ 'team' ] },
+        meta: { title: '主播管理', keepAlive: true, icon: 'star', permission: [ 'team' ] },
         children: [
           {
             path: '/anchor/manage',

@@ -9,7 +9,7 @@
           </a>
         </div>
         <div class="desc">
-          Ant Design 是西湖区最具影响力的 Web 设计规范
+          长江大学 · 物联11602 · 王周
         </div>
       </div>
 
@@ -17,9 +17,8 @@
 
       <div class="footer">
         <div class="links">
-          <a href="_self">帮助</a>
-          <a href="_self">隐私</a>
-          <a href="_self">条款</a>
+          <a href="https://github.com/2511zzZ/LBMS-web">Github</a>
+          <a href="https://www.cnblogs.com/2511zzZ/">blog</a>
         </div>
         <div class="copyright">
           Copyright &copy; 2020 zzZ

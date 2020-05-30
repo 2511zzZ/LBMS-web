@@ -98,7 +98,9 @@ export default {
       if (store.getters.roleNum===4){
         this.level = 'team'
       }
-      this.levelId = store.getters.levelNum
+      if(store.getters.levelNum){
+        this.levelId = store.getters.levelNum
+      }
     },
 
   },

@@ -199,11 +199,11 @@ export default {
     },
     handleMark (alertId, status) {
       if (status === 1) {
-        this.$store.commit('SET_ALARM_NUM', store.getters.alarmNum - 1)
         const parameters = { alarmId: alertId, operation: 2 }
         updateAlert(parameters).then(res => {
           this.getOverView()
           this.alertClassify(status)
+          this.$store.commit('SET_ALARM_NUM', store.getters.alarmNum - 1)
           this.$message.success('警报处理成功!')
         }).catch(err => {
           this.$message.error(err)
@@ -211,6 +211,7 @@ export default {
       } else {
         deleteAlert( {alarmId: alertId} ).then(res => {
           this.alertClassify(status)
+          this.$store.commit('SET_ALARM_NUM', store.getters.alarmNum - 1)
           this.$message.success('警报删除成功!')
         }).catch(err => {
           this.$message.error(err)

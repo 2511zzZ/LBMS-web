@@ -12,7 +12,7 @@
           <a-tab-pane loading="true" tab="观看人数" key="1">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyWatchData" :settings="chartSettings" :title="historyTitle"></ve-line>
+                <ve-line :data="historyWatchData" :settings="watchChartSettings" :title="historyTitle"></ve-line>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="分区历史排行" :list="branchHistoryWatchRank"/>
@@ -22,7 +22,7 @@
           <a-tab-pane tab="礼物数" key="2">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyGiftData" :settings="chartSettings" :title="noDataTitle"></ve-line>
+                <ve-line :data="historyGiftData" :settings="giftChartSettings" :title="noDataTitle"></ve-line>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="分区历史排行" :list="branchHistoryGiftRank"/>
@@ -32,7 +32,7 @@
           <a-tab-pane tab="弹幕数" key="3">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyBulletData" :settings="chartSettings" :title="noDataTitle"></ve-line>
+                <ve-line :data="historyBulletData" :settings="bulletChartSettings" :title="noDataTitle"></ve-line>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="分区历史排行" :list="branchHistoryBulletRank"/>
@@ -111,6 +111,20 @@
         branchHistoryWatchRank: [],
         branchHistoryGiftRank: [],
         branchHistoryBulletRank: [],
+
+        // 折线图设置
+        watchChartSettings: {
+          scale: [true, true],
+          metrics: ['平均观看人数', '最大观看人数']
+        },
+        giftChartSettings: {
+          scale: [true, true],
+          metrics: ['礼物数']
+        },
+        bulletChartSettings: {
+          scale: [true, true],
+          metrics: ['弹幕数']
+        },
 
         getHistoryData: getTotalHistoryData
 

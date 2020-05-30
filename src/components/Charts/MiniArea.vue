@@ -62,7 +62,6 @@ export default {
   created () {
     const datetimeStr = this.formatter(this.date,'yyyy-MM-dd HH:mm:ss')
     const parameters = {}
-    console.log(this.levelId)
     if (this.level === 'total'){
       parameters.totalId = this.levelId
       this.getOnlineData = getTotalOnlineData

@@ -36,48 +36,48 @@
         </a-tabs>
       </div>
     </a-card>
-    <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
-      <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <div class="extra-wrapper" slot="tabBarExtraContent">
-            <a-range-picker :style="{width: '256px'}"
-                            :default-value="[moment(new Date(), dateFormat).add(-1, 'months'), moment(new Date(), dateFormat)]"
-                            @change="historyTimeChanged"
-            />
-          </div>
-          <a-tab-pane loading="true" tab="观看人数" key="1">
-            <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyWatchData" :settings="chartSettings" :title="historyTitle"></ve-line>
-              </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区历史排行" :list="branchHistoryWatchRank"/>
-              </a-col>
-            </a-row>
-          </a-tab-pane>
-          <a-tab-pane tab="礼物数" key="2">
-            <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyGiftData" :settings="chartSettings" :title="noDataTitle"></ve-line>
-              </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区历史排行" :list="branchHistoryGiftRank"/>
-              </a-col>
-            </a-row>
-          </a-tab-pane>
-          <a-tab-pane tab="弹幕数" key="3">
-            <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <ve-line :data="historyBulletData" :settings="chartSettings" :title="noDataTitle"></ve-line>
-              </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="分区历史排行" :list="branchHistoryBulletRank"/>
-              </a-col>
-            </a-row>
-          </a-tab-pane>
-        </a-tabs>
-      </div>
-    </a-card>
+<!--    <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">-->
+<!--      <div class="salesCard">-->
+<!--        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">-->
+<!--          <div class="extra-wrapper" slot="tabBarExtraContent">-->
+<!--            <a-range-picker :style="{width: '256px'}"-->
+<!--                            :default-value="[moment(new Date(), dateFormat).add(-1, 'months'), moment(new Date(), dateFormat)]"-->
+<!--                            @change="historyTimeChanged"-->
+<!--            />-->
+<!--          </div>-->
+<!--          <a-tab-pane loading="true" tab="观看人数" key="1">-->
+<!--            <a-row>-->
+<!--              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <ve-line :data="historyWatchData" :settings="chartSettings" :title="historyTitle"></ve-line>-->
+<!--              </a-col>-->
+<!--              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <rank-list title="分区历史排行" :list="branchHistoryWatchRank"/>-->
+<!--              </a-col>-->
+<!--            </a-row>-->
+<!--          </a-tab-pane>-->
+<!--          <a-tab-pane tab="礼物数" key="2">-->
+<!--            <a-row>-->
+<!--              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <ve-line :data="historyGiftData" :settings="chartSettings" :title="noDataTitle"></ve-line>-->
+<!--              </a-col>-->
+<!--              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <rank-list title="分区历史排行" :list="branchHistoryGiftRank"/>-->
+<!--              </a-col>-->
+<!--            </a-row>-->
+<!--          </a-tab-pane>-->
+<!--          <a-tab-pane tab="弹幕数" key="3">-->
+<!--            <a-row>-->
+<!--              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <ve-line :data="historyBulletData" :settings="chartSettings" :title="noDataTitle"></ve-line>-->
+<!--              </a-col>-->
+<!--              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <rank-list title="分区历史排行" :list="branchHistoryBulletRank"/>-->
+<!--              </a-col>-->
+<!--            </a-row>-->
+<!--          </a-tab-pane>-->
+<!--        </a-tabs>-->
+<!--      </div>-->
+<!--    </a-card>-->
   </div>
 </template>
 
