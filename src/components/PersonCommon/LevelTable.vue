@@ -186,10 +186,6 @@ export default {
             res.totalCount = res.count
             res.totalPage = Math.floor(res.count, res.pageSize)
             res.data = res.datas
-            // const nameList = ['李海','黄宇翔','王嘉豪','王乔','李先一','张家源','陈靖仇','马硕','陈张宇','何木灵']
-            // for(let i=0;i<res.data.length;i++){
-            //   res.data[i].employeeName = nameList[i]
-            // }
             delete res.count
             delete res.datas
             return res

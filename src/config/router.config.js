@@ -182,13 +182,13 @@ export const asyncRouterMap = [
         component: PageView,
         redirect: '/system/settings',
         name: 'system',
-        meta: { title: '系统管理', icon: 'setting', keepAlive: true, permission: [ 'team' ] },
+        meta: { title: '系统管理', icon: 'setting', keepAlive: true, permission: [ 'total' ] },
         children: [
           {
             path: '/system/settings',
             name: 'SystemSettings',
             component: () => import('@/views/system/settings/Index'),
-            meta: { title: '系统设置', hideHeader: true, permission: [ 'team' ] },
+            meta: { title: '系统设置', hideHeader: true, permission: [ 'total' ] },
             redirect: '/system/settings/alert',
             hideChildrenInMenu: true,
             children: [
@@ -196,13 +196,13 @@ export const asyncRouterMap = [
                 path: '/system/settings/alert',
                 name: 'AlertSettings',
                 component: () => import('@/views/system/settings/alert'),
-                meta: { title: '警报设置', keepAlive: true, permission: [ 'team' ] }
+                meta: { title: '警报设置', keepAlive: true, permission: [ 'total' ] }
               },
               {
                 path: '/system/settings/transmit',
                 name: 'TransmitSettings',
                 component: () => import('@/views/system/settings/alertTransmit'),
-                meta: { title: '警报传递设置', keepAlive: true, permission: [ 'team' ] }
+                meta: { title: '警报传递设置', keepAlive: true, permission: [ 'total' ] }
               }
             ]
           }
